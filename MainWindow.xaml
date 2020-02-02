@@ -4,9 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
+        xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1280">
     <Grid>
+        <Button Content="Buy" HorizontalAlignment="Left" Margin="400,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
+        <Button Content="Sell" HorizontalAlignment="Left" Margin="500,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
+
+        <Label Content="Account Value:" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top"/>
+        <Label Content="Available Funds:" HorizontalAlignment="Left" Margin="650,30,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="£0" HorizontalAlignment="Left" Margin="550,30,0,0" VerticalAlignment="Top"/>
+        <Label Content="£0" HorizontalAlignment="Left" Margin="750,30,0,0" VerticalAlignment="Top"/>
+
+        <!--<wpf:Chart BottomTitle="Argument" LeftTitle="Function">
+            <wpf:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
+        </wpf:Chart>-->
         
+        <StackPanel VerticalAlignment="Top">
+            <Menu Width="Auto" Height="20">
+                <MenuItem Header="_File">
+                    <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+        <Button Content="Refresh" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
+        <StackPanel Margin="0,20,980,0"/>
     </Grid>
 </Window>

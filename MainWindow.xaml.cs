@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InteractiveDataDisplay;
+using InteractiveDataDisplay.WPF;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -23,6 +25,9 @@ namespace StockTrader_.NET_Framework_
         public MainWindow()
         {
             InitializeComponent();
+            var x = Enumerable.Range(0, 1001).Select(i => i / 10.0).ToArray();
+            var y = x.Select(v => Math.Abs(v) < 1e-10 ? 1 : Math.Sin(v) / v).ToArray();
+            //linegraph.Plot(x, y); // x and y are IEnumerable<double>
         }
     }
 }
