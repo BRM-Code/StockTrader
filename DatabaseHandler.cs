@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace StockTrader_.NET_Framework_
 {
-    class DatabaseHandler
+    public class DatabaseHandler
     {
         private MySqlConnection _connection;
         private string _cnnString;
@@ -40,7 +40,7 @@ namespace StockTrader_.NET_Framework_
                 }
                 catch
                 {
-                    Console.WriteLine("Couldn't convert the json into a object");
+                    Console.WriteLine("Couldn't convert the json into a object, probably because a value was null");
                     return;
                 }
             }
@@ -49,7 +49,61 @@ namespace StockTrader_.NET_Framework_
                 Console.WriteLine("The API isn't calling me back :'(");
             }
 
-            const string query = "INSERT INTO 'stocks' (symbol, companyName, primaryExchange, calculationPrice, open, openTime, close, closeTime, high, low, latestPrice, latestSource, latestTime, latestUpdate, latestVolume, iexRealtimePrice, iexRealtimeSize, iexLastUpdated, delayedPrice, delayedPriceTime, extendedPrice, extendedChange, extendedChangePercent, extendedPriceTime, previousClose, previousVolume, change, changePercent, volume, iexMarketPercent, iexVolume, avgTotalVolume, iexBidPrice, iexBidSize, iexAskPrice, iexAskSize, marketCap, peRatio, week52High, week52Low, ytdChange, lastTradeTime, isUSMarketOpen ) VALUES (@symbol,@companyName,@primaryExchange,@calculationPrice,@open,@openTime,@close,@closeTime,@high,@low,@latestPrice,@latestSource,@latestTime,@latestUpdate,@latestVolume,@iexRealtimePrice,@iexRealtimeSize,@iexLastUpdated,@delayedPrice,@delayedPriceTime,@extendedPrice,@extendedChange,@extendedChangePercent,@extendedPriceTime,@previousClose,@previousVolume,@change,@changePercent,@volume,@iexMarketPercent,@iexVolume,@avgTotalVolume,@iexBidPrice,@iexBidSize,@iexAskPrice,@iexAskSize,@marketCap,@peRatio,@week52High,@week52Low,@ytdChange,@lastTradeTime,@isUSMarketOpen);";
+            string query = "INSERT INTO stocks (symbol, companyName, primaryExchange, calculationPrice, open, openTime, close, closeTime, high, low, latestPrice, latestSource, latestTime, latestUpdate, latestVolume, iexRealtimePrice, iexRealtimeSize, iexLastUpdated, delayedPrice, delayedPriceTime, extendedPrice, extendedChange, extendedChangePercent, extendedPriceTime, previousClose, previousVolume, change, changePercent, volume, iexMarketPercent, iexVolume, avgTotalVolume, iexBidPrice, iexBidSize, iexAskPrice, iexAskSize, marketCap, peRatio, week52High, week52Low, ytdChange, lastTradeTime, isUSMarketOpen )";
+
+            {
+                // create the query
+                query += " VALUES (";
+                query += $"'{APIresponseObject.symbol}', ";
+                query += $"'{APIresponseObject.companyName}', ";
+                query += $"'{APIresponseObject.primaryExchange}', ";
+                query += $"'{APIresponseObject.calculationPrice}', ";
+                query += $"'{APIresponseObject.open}', ";
+                query += $"'{APIresponseObject.openTime}', ";
+                query += $"'{APIresponseObject.close}', ";
+                query += $"'{APIresponseObject.closeTime}', ";
+                query += $"'{APIresponseObject.high}', ";
+                query += $"'{APIresponseObject.low}', ";
+                query += $"'{APIresponseObject.latestPrice}', ";
+                query += $"'{APIresponseObject.latestSource}', ";
+                query += $"'{APIresponseObject.latestTime}', ";
+                query += $"'{APIresponseObject.latestUpdate}', ";
+                query += $"'{APIresponseObject.latestVolume}', ";
+                query += $"'{APIresponseObject.iexRealtimePrice}', ";
+                query += $"'{APIresponseObject.iexRealtimeSize}', ";
+                query += $"'{APIresponseObject.iexLastUpdated}', ";
+               // query += $"'{APIresponseObject.delayedPrice}', ";
+               // query += $"'{APIresponseObject.delayedPriceTime}', ";
+                query += $"'{APIresponseObject.extendedPrice}', ";
+                query += $"'{APIresponseObject.extendedChange}', ";
+                query += $"'{APIresponseObject.extendedChangePercent}', ";
+                query += $"'{APIresponseObject.extendedPriceTime}', ";
+                query += $"'{APIresponseObject.previousClose}', ";
+                query += $"'{APIresponseObject.previousVolume}', ";
+                query += $"'{APIresponseObject.change}', ";
+                query += $"'{APIresponseObject.changePercent}', ";
+                query += $"'{APIresponseObject.volume}', ";
+                query += $"'{APIresponseObject.iexMarketPercent}', ";
+                query += $"'{APIresponseObject.iexVolume}', ";
+                query += $"'{APIresponseObject.avgTotalVolume}', ";
+                query += $"'{APIresponseObject.iexBidPrice}', ";
+                query += $"'{APIresponseObject.iexBidSize}', ";
+                query += $"'{APIresponseObject.iexAskPrice}', ";
+                query += $"'{APIresponseObject.iexAskSize}', ";
+                query += $"'{APIresponseObject.marketCap}', ";
+                query += $"'{APIresponseObject.peRatio}', ";
+                query += $"'{APIresponseObject.week52High}', ";
+                query += $"'{APIresponseObject.week52Low}', ";
+                query += $"'{APIresponseObject.ytdChange}', ";
+                query += $"'{APIresponseObject.lastTradeTime}', ";
+                query += $"'{APIresponseObject.isUSMarketOpen}'";
+
+                query += ");";
+            }
+
+            // const string query = "INSERT INTO 'stocks' (symbol, companyName, primaryExchange, calculationPrice, open, openTime, close, closeTime, high, low, latestPrice, latestSource, latestTime, latestUpdate, latestVolume, iexRealtimePrice, iexRealtimeSize, iexLastUpdated, delayedPrice, delayedPriceTime, extendedPrice, extendedChange, extendedChangePercent, extendedPriceTime, previousClose, previousVolume, change, changePercent, volume, iexMarketPercent, iexVolume, avgTotalVolume, iexBidPrice, iexBidSize, iexAskPrice, iexAskSize, marketCap, peRatio, week52High, week52Low, ytdChange, lastTradeTime, isUSMarketOpen ) VALUES ( @symbol,  @companyName,  @primaryExchange,  @calculationPrice,  @open, @openTime, @close, @closeTime, @high, @low, @latestPrice, @latestSource, @latestTime, @latestUpdate, @latestVolume, @iexRealtimePrice, @iexRealtimeSize, @iexLastUpdated, @delayedPrice, @delayedPriceTime, @extendedPrice, @extendedChange, @extendedChangePercent, @extendedPriceTime, @previousClose, @previousVolume, @change, @changePercent, @volume, @iexMarketPercent, @iexVolume, @avgTotalVolume, @iexBidPrice, @iexBidSize, @iexAskPrice, @iexAskSize, @marketCap, @peRatio, @week52High, @week52Low, @ytdChange, @lastTradeTime, @isUSMarketOpen);";
+            // const string query = "SELECT * FROM stocks";
+            
             _connection.Open();
             var command = new MySqlCommand(query, _connection);
 

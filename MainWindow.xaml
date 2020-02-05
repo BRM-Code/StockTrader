@@ -17,9 +17,9 @@
         <Label Content="£0" HorizontalAlignment="Left" Margin="550,30,0,0" VerticalAlignment="Top"/>
         <Label Content="£0" HorizontalAlignment="Left" Margin="750,30,0,0" VerticalAlignment="Top"/>
 
-        <!--<wpf:Chart BottomTitle="Argument" LeftTitle="Function">
+        <wpf:Chart BottomTitle="Argument" LeftTitle="Function" Margin="294,56,48.6,128.4">
             <wpf:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
-        </wpf:Chart>-->
+        </wpf:Chart>
         
         <StackPanel VerticalAlignment="Top">
             <Menu Width="Auto" Height="20">
