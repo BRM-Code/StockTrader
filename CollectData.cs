@@ -5,30 +5,37 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    class CollectData
+    class ApiCommunicator
     {
-        public CollectData(double values, string company)
+        public static Dictionary<DateTime, Array> CollectData(string company)
         {
             //https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo
 
             using var wb = new WebClient();
-                //string APItoken;
-                string APItoken = "Q4AZUW80DHGKUS3A"; // The API token
+                string APIresponse;
+                string APItoken = "Q4AZUW80DHGKUS3A";
                 UriBuilder APIuribuild = new UriBuilder();//Setting up the UriBuilder
                 APIuribuild.Scheme = "https";
                 APIuribuild.Host = "www.alphavantage.co";
                 APIuribuild.Path = $"/query";
-                APIuribuild.Query = $"functions=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={APItoken}";
+                APIuribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={APItoken}";
                 Uri APIuri = APIuribuild.Uri;//Tells UriBuilder that all the URL parts are there
+                Console.WriteLine(APIuri);
                 try
-                {
-                    var APIresponse = wb.DownloadString(APIuri);
-                }
+                {APIresponse = wb.DownloadString(APIuri);}
                 catch
-                { Console.WriteLine("The API isn't calling me back :("); }
+                {Console.WriteLine("The API isn't calling me back :(");
+                    return null;}
+                JObject responseJObject = JObject.Parse(APIresponse);
+                DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
+                responseJObject.Property("Meta Data").Remove();
+                var values = JsonConvert.DeserializeObject<Dictionary<DateTime, Array>>(responseJObject.ToString());
+                //converts the responseJObject into a string and then turns that string into a dictionary
+                return values;
         }
     }
 }
