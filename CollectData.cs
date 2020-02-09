@@ -11,7 +11,7 @@ namespace StockTrader_.NET_Framework_
 {
     class ApiCommunicator
     {
-        public static Dictionary<DateTime, Array> CollectData(string company)
+        public static Dictionary<string, JObject> CollectData(string company)
         {
             //https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo
 
@@ -33,9 +33,15 @@ namespace StockTrader_.NET_Framework_
                 JObject responseJObject = JObject.Parse(APIresponse);
                 DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
                 responseJObject.Property("Meta Data").Remove();
-                var values = JsonConvert.DeserializeObject<Dictionary<DateTime, Array>>(responseJObject.ToString());
+
+                var values = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(responseJObject.ToString());
                 //converts the responseJObject into a string and then turns that string into a dictionary
                 return values;
+        }
+        
+        DateTime RoundUp(DateTime dt, TimeSpan d)
+        {
+            return new DateTime((dt.Ticks + d.Ticks - 1) / d.Ticks * d.Ticks, dt.Kind);
         }
     }
 }
