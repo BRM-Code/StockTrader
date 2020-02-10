@@ -11,9 +11,10 @@ namespace StockTrader_.NET_Framework_
 {
     class ApiCommunicator
     {
-        public static Dictionary<string, JObject> CollectData(string company)
+        public static JToken CollectData(string company)
         {
-            //https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo
+            //The url that we are constructing 
+            //https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=Q4AZUW80DHGKUS3A
 
             using var wb = new WebClient();
                 string APIresponse;
@@ -30,18 +31,17 @@ namespace StockTrader_.NET_Framework_
                 catch
                 {Console.WriteLine("The API isn't calling me back :(");
                     return null;}
+                
                 JObject responseJObject = JObject.Parse(APIresponse);
                 DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
-                responseJObject.Property("Meta Data").Remove();
-
-                var values = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(responseJObject.ToString());
+                // responseJObject.Property("Meta Data").Remove();
+                //Makes a array called keys that is full of the latest datapoints
+                var keys = responseJObject["Time Series (5min)"].ToObject<Dictionary<string, object>>().Keys.ToArray();
+                var values = responseJObject["Time Series (5min)"];
+                
+                //var values = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(responseJObject.ToString());
                 //converts the responseJObject into a string and then turns that string into a dictionary
                 return values;
-        }
-        
-        DateTime RoundUp(DateTime dt, TimeSpan d)
-        {
-            return new DateTime((dt.Ticks + d.Ticks - 1) / d.Ticks * d.Ticks, dt.Kind);
         }
     }
 }

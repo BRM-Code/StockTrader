@@ -134,9 +134,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CollectData.cs" />
-    <Compile Include="DatabaseHandler.cs" />
-    <Compile Include="stock.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="GraphHandler.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
