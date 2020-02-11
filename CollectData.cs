@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -33,13 +34,19 @@ namespace StockTrader_.NET_Framework_
                     return null;}
                 
                 JObject responseJObject = JObject.Parse(APIresponse);
-                DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
-                // responseJObject.Property("Meta Data").Remove();
+                try
+                {
+                    DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
+                }
+                catch
+                {
+                    MessageBox.Show("Exceeded the API's calls per minute (5)", "Error");
+                    return null;
+                }
                 //Makes a array called keys that is full of the latest datapoints
                 var keys = responseJObject["Time Series (5min)"].ToObject<Dictionary<string, object>>().Keys.ToArray();
                 var values = responseJObject["Time Series (5min)"];
-                
-                //var values = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(responseJObject.ToString());
+            
                 //converts the responseJObject into a string and then turns that string into a dictionary
                 return values;
         }

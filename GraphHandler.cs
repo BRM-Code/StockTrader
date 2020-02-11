@@ -19,6 +19,11 @@ namespace StockTrader_.NET_Framework_
 
         public void Draw(JToken datapoints)
         {
+            if (datapoints == null)
+            {
+                Console.WriteLine("The API returned null (probably because you ran out of calls)");
+                return;
+            }
             float[] y = new float[40];
             for (int i = 0; i < 40; )
             {

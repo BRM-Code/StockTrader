@@ -26,90 +26,120 @@ namespace StockTrader_.NET_Framework_
         public MainWindow()
         {
             InitializeComponent();
-            var values = ApiCommunicator.CollectData("aapl");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values);
+            
 
         }
 
         private void Alphabet(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("goog");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Microsoft(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("msft");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Apple(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("aapl");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Uber(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("uber");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Intel(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("intc");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void IBM(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("ibm");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Facebook(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("fb");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void WD(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("wdc");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Nvidia(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("nvda");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Oracle(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("orcl");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Amazon(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("amzn");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void AMD(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("amd");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Dell(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("dell");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Adobe(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("adbe");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void QinetiQ(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("qq");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
 
         private void Spotify(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var values = ApiCommunicator.CollectData("spot");
+            GraphHandler LineGraph = new GraphHandler(linegraph);
+            LineGraph.Draw(values);
         }
     }
 }
