@@ -21,20 +21,25 @@
             <wpf:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
         </wpf:Chart>
         
-        <StackPanel VerticalAlignment="Top">
-            <Menu Width="Auto" Height="20">
-                <MenuItem Header="_File">
-                    <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
-                </MenuItem>
-                <MenuItem Header="_Tools">
-                    <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
-                </MenuItem>
-                <MenuItem Header="_Help">
-                    <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
-                </MenuItem>
-            </Menu>
-        </StackPanel>
         <Button Content="Refresh" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
-        <StackPanel Margin="0,20,980,0"/>
+        
+        <StackPanel HorizontalAlignment="Left" Margin="30,30,0,10.4" Width="200" RenderTransformOrigin="0.5,0.5">
+            <Button Click="Apple" Height="40" Margin="0,0,-0.2,0">Apple</Button>
+            <Button Click="Microsoft" Height="40" Margin="0,0,-0.2,0">Microsoft</Button>
+            <Button Click="Alphabet" Height="40" Margin="0,0,-0.2,0">Alphabet</Button>
+            <Button Click="Uber" Height="40" Margin="0,0,-0.2,0">Uber</Button>
+            <Button Click="Intel" Height="40" Margin="0,0,-0.2,0">Intel</Button>
+            <Button Click="IBM" Height="40" Margin="0,0,-0.2,0">IBM</Button>
+            <Button Click="Facebook" Height="40" Margin="0,0,-0.2,0">Facebook</Button>
+            <Button Click="WD" Height="40" Margin="0,0,-0.2,0">Western Digital</Button>
+            <Button Click="Nvidia" Height="40" Margin="0,0,-0.2,0">Nvidia</Button>
+            <Button Click="Oracle" Height="40" Margin="0,0,-0.2,0">Oracle</Button>
+            <Button Click="Amazon" Height="40" Margin="0,0,-0.2,0">Amazon</Button>
+            <Button Click="AMD" Height="40" Margin="0,0,-0.2,0">AMD</Button>
+            <Button Click="Dell" Height="40" Margin="0,0,-0.2,0">Dell</Button>
+            <Button Click="Adobe" Height="40" Margin="0,0,-0.2,0">Adobe</Button>
+            <Button Click="QinetiQ" Height="40" Margin="0,0,-0.2,0">QinetiQ</Button>
+            <Button Click="Spotify"  Height="40" Margin="0,0,-0.2,0">Spotify</Button>
+        </StackPanel>
     </Grid>
 </Window>
