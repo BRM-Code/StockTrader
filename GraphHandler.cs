@@ -33,9 +33,10 @@ namespace StockTrader_.NET_Framework_
 
 
             List<int> x = new List<int>();
-            for (int i = 0; i <= nodatapoints;)
+            for (int i = 0; i < nodatapoints;)
             {
                 x.Add(i);
+                i++;
             }
 
             LineGraph.Plot(x, y); // x and y are IEnumerable<double>
