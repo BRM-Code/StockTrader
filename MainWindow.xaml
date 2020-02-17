@@ -20,9 +20,9 @@
         <wpf:Chart BottomTitle="Argument" LeftTitle="Function" Margin="294,56,48.6,128.4">
             <wpf:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
         </wpf:Chart>
-        
+
         <Button Content="Refresh" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
-        
+
         <StackPanel HorizontalAlignment="Left" Margin="30,30,0,10.4" Width="200" RenderTransformOrigin="0.5,0.5">
             <Button Click="Apple" Height="40" Margin="0,0,-0.2,0">Apple</Button>
             <Button Click="Microsoft" Height="40" Margin="0,0,-0.2,0">Microsoft</Button>
@@ -41,5 +41,7 @@
             <Button Click="QinetiQ" Height="40" Margin="0,0,-0.2,0">QinetiQ</Button>
             <Button Click="Spotify"  Height="40" Margin="0,0,-0.2,0">Spotify</Button>
         </StackPanel>
+        <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" Margin="1010,590,220,80" />
+        <Slider x:Name="nodatapointslider" Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Margin="800,0,10,50" VerticalAlignment="Bottom" />
     </Grid>
 </Window>
