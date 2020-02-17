@@ -26,8 +26,6 @@ namespace StockTrader_.NET_Framework_
         public MainWindow()
         {
             InitializeComponent();
-            
-
         }
 
         private void Alphabet(object sender, RoutedEventArgs e)
