@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
     <Grid>
-        <Button Content="Buy" HorizontalAlignment="Left" Margin="400,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
-        <Button Content="Sell" HorizontalAlignment="Left" Margin="500,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
+        <Button Click="BuyButton"  Content="Buy" HorizontalAlignment="Left" Margin="400,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
+        <Button Click="SellButton"  Content="Sell" HorizontalAlignment="Left" Margin="500,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
 
         <Label Content="Account Value:" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top"/>
         <Label Content="Available Funds:" HorizontalAlignment="Left" Margin="650,30,0,0" VerticalAlignment="Top"/>
@@ -17,31 +17,29 @@
         <Label Content="£0" HorizontalAlignment="Left" Margin="550,30,0,0" VerticalAlignment="Top"/>
         <Label Content="£0" HorizontalAlignment="Left" Margin="750,30,0,0" VerticalAlignment="Top"/>
 
-        <wpf:Chart BottomTitle="Argument" LeftTitle="Function" Margin="294,56,48.6,128.4">
-            <wpf:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
+        <wpf:Chart BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Margin="294,56,48.6,128.4">
+            <wpf:LineGraph x:Name="linegraph" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
         </wpf:Chart>
 
-        <Button Content="Refresh" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
-
         <StackPanel HorizontalAlignment="Left" Margin="30,30,0,10.4" Width="200" RenderTransformOrigin="0.5,0.5">
-            <Button Click="Apple" Height="40" Margin="0,0,-0.2,0">Apple</Button>
-            <Button Click="Microsoft" Height="40" Margin="0,0,-0.2,0">Microsoft</Button>
-            <Button Click="Alphabet" Height="40" Margin="0,0,-0.2,0">Alphabet</Button>
-            <Button Click="Uber" Height="40" Margin="0,0,-0.2,0">Uber</Button>
-            <Button Click="Intel" Height="40" Margin="0,0,-0.2,0">Intel</Button>
-            <Button Click="IBM" Height="40" Margin="0,0,-0.2,0">IBM</Button>
-            <Button Click="Facebook" Height="40" Margin="0,0,-0.2,0">Facebook</Button>
-            <Button Click="WD" Height="40" Margin="0,0,-0.2,0">Western Digital</Button>
-            <Button Click="Nvidia" Height="40" Margin="0,0,-0.2,0">Nvidia</Button>
-            <Button Click="Oracle" Height="40" Margin="0,0,-0.2,0">Oracle</Button>
-            <Button Click="Amazon" Height="40" Margin="0,0,-0.2,0">Amazon</Button>
-            <Button Click="AMD" Height="40" Margin="0,0,-0.2,0">AMD</Button>
-            <Button Click="Dell" Height="40" Margin="0,0,-0.2,0">Dell</Button>
-            <Button Click="Adobe" Height="40" Margin="0,0,-0.2,0">Adobe</Button>
-            <Button Click="QinetiQ" Height="40" Margin="0,0,-0.2,0">QinetiQ</Button>
-            <Button Click="Spotify"  Height="40" Margin="0,0,-0.2,0">Spotify</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Apple</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Microsoft</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Alphabet</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Uber</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Intel</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">IBM</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Facebook</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Western Digital</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Nvidia</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Oracle</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Amazon</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">AMD</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Dell</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">Adobe</Button>
+            <Button Click="ButtonHandler" Height="40" Margin="0,0,-0.2,0">QinetiQ</Button>
+            <Button Click="ButtonHandler"  Height="40" Margin="0,0,-0.2,0">Spotify</Button>
         </StackPanel>
-        <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" Margin="1010,590,220,80" />
-        <Slider x:Name="nodatapointslider" Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Margin="800,0,10,50" VerticalAlignment="Bottom" />
+        <TextBox Text="{Binding ElementName=nodatapointslider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Margin="1011,579,210,80" />
+        <Slider x:Name="nodatapointslider" Maximum="100" Minimum="1" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Margin="800,0,10,50" VerticalAlignment="Bottom" />
     </Grid>
 </Window>

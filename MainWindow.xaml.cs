@@ -1,5 +1,4 @@
-﻿using InteractiveDataDisplay.WPF;
-using System;
+﻿using System;
 using System.Windows;
 
 namespace StockTrader_.NET_Framework_
@@ -14,116 +13,44 @@ namespace StockTrader_.NET_Framework_
             InitializeComponent();
         }
 
-        private void Alphabet(object sender, RoutedEventArgs e)
+        private void ButtonHandler(object sender, RoutedEventArgs e)
         {
-            var values = ApiCommunicator.CollectData("goog");
+            switch (sender.ToString())
+            {
+                case "System.Windows.Controls.Button: Apple": FindData("aapl"); break;
+                case "System.Windows.Controls.Button: Microsoft": FindData("msft"); break;
+                case "System.Windows.Controls.Button: Alphabet": FindData("goog"); break;
+                case "System.Windows.Controls.Button: Uber": FindData("uber"); break;
+                case "System.Windows.Controls.Button: Intel": FindData("intc"); break;
+                case "System.Windows.Controls.Button: IBM": FindData("ibm"); break;
+                case "System.Windows.Controls.Button: Facebook": FindData("fb"); break;
+                case "System.Windows.Controls.Button: WD": FindData("wdc"); break;
+                case "System.Windows.Controls.Button: Nvidia": FindData("nvda"); break;
+                case "System.Windows.Controls.Button: Oracle": FindData("orcl"); break;
+                case "System.Windows.Controls.Button: Amazon": FindData("amzn"); break;
+                case "System.Windows.Controls.Button: AMD": FindData("amd"); break;
+                case "System.Windows.Controls.Button: Dell": FindData("dell"); break;
+                case "System.Windows.Controls.Button: Adobe": FindData("adbe"); break;
+                case "System.Windows.Controls.Button: QinetiQ": FindData("qq"); break;
+                case "System.Windows.Controls.Button: Spotify": FindData("spot"); break;
+            }
+        }
+
+        private void FindData(string code)
+        {
+            var values = ApiCommunicator.CollectData(code);
             GraphHandler LineGraph = new GraphHandler(linegraph);
             LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
 
-        private void Microsoft(object sender, RoutedEventArgs e)
+        private void BuyButton(object sender, RoutedEventArgs e)
         {
-            var values = ApiCommunicator.CollectData("msft");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
+            throw new NotImplementedException();
         }
 
-        private void Apple(object sender, RoutedEventArgs e)
+        private void SellButton(object sender, RoutedEventArgs e)
         {
-            var values = ApiCommunicator.CollectData("aapl");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Uber(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("uber");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Intel(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("intc");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void IBM(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("ibm");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Facebook(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("fb");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void WD(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("wdc");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Nvidia(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("nvda");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Oracle(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("orcl");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Amazon(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("amzn");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void AMD(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("amd");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Dell(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("dell");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Adobe(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("adbe");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void QinetiQ(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("qq");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
-
-        private void Spotify(object sender, RoutedEventArgs e)
-        {
-            var values = ApiCommunicator.CollectData("spot");
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
+            throw new NotImplementedException();
         }
     }
 }
