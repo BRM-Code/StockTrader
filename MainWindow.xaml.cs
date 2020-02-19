@@ -36,12 +36,10 @@ namespace StockTrader_.NET_Framework_
             }
         }
 
-        private void FindData(string code)
-        {
+        private void FindData(string code) { 
             var values = ApiCommunicator.CollectData(code);
             GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
-        }
+            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value)); }
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {

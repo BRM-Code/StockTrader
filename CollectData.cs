@@ -9,6 +9,13 @@ namespace StockTrader_.NET_Framework_
 {
     class ApiCommunicator
     {
+        public static float CurrentPrice(string company)
+        {
+            JToken data = CollectData(company);
+            float value = Convert.ToSingle(data[data.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            return value;
+        }
+
         public static JToken CollectData(string company)
         {
             //The url that we are constructing 
@@ -40,10 +47,8 @@ namespace StockTrader_.NET_Framework_
                     MessageBox.Show("Exceeded the API's calls per minute (5)", "Error");
                     return null;
                 }
-                //Makes a array called keys that is full of the latest datapoints
-                var keys = responseJObject["Time Series (5min)"].ToObject<Dictionary<string, object>>().Keys.ToArray();
+
                 var values = responseJObject["Time Series (5min)"];
-            
                 //converts the responseJObject into a string and then turns that string into a dictionary
                 return values;
         }
