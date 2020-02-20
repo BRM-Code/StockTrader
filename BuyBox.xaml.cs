@@ -1,32 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    /// <summary>
-    /// Interaction logic for BuyBox.xaml
-    /// </summary>
     public partial class BuyBox : Window
     {
         public int noshares = 0;
-        public bool complete = false;
+        public bool complete = false;// used as a indicator to tell the main program when the user has entered the amount of shares
 
         public BuyBox(JToken datapoints)
         {
             InitializeComponent();
+            // updates the window with the latest prices of the selected stock
             current.Content = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
 
@@ -36,6 +24,5 @@ namespace StockTrader_.NET_Framework_
             complete = true;
             this.Close();
         }
-
     }
 }
