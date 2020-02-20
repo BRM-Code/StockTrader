@@ -128,7 +128,6 @@
     <Compile Include="BuyBox.xaml.cs">
       <DependentUpon>BuyBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Portfolio.cs" />
     <Compile Include="Trader.cs" />
     <Page Include="BuyBox.xaml">
       <SubType>Designer</SubType>

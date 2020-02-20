@@ -12,16 +12,16 @@
         <Label Content="Buy" Grid.Row="0" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
         
         <Label Content="Shares:" HorizontalAlignment="Left" Margin="124,32.333,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Center" Height="23"   Text="Amount" VerticalAlignment="Top" Width="50" Grid.Row="1" Margin="200,35,92,0"/>
+        <TextBox x:Name="SharesAmount" HorizontalAlignment="Center" Height="23"   Text="Amount" VerticalAlignment="Top" Width="50" Grid.Row="1" Margin="200,35,92,0"/>
         
         <Label Content="Current Price:" HorizontalAlignment="Left" Margin="90,76.333,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <!-- update this! -->
+       
         <Label x:Name="current" Content="£0"  HorizontalAlignment="Center" Margin="178,76,64,0" Grid.Row="1" VerticalAlignment="Top"/>
 
         <!--<Label Content="Total:" HorizontalAlignment="Left" Margin="133,20.333,0,0" Grid.Row="2" VerticalAlignment="Top" />
         <Label x:Name="total" Content="£0"  HorizontalAlignment="Center" Margin="114,20,0,0" Grid.Row="2" VerticalAlignment="Top"/>-->
         
-        <Button Content="Submit" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="76"/>
+        <Button Click="Submit" Content="Submit" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="76"/>
 
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

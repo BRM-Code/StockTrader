@@ -57,6 +57,9 @@ namespace StockTrader_.NET_Framework_
             JToken Token = ApiCommunicator.CollectData(currentCompany);
             BuyBox newBuyBox = new BuyBox(Token);
             newBuyBox.Show();
+            while (newBuyBox.complete == false) {}
+
+            Trader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount));
         }
 
         private void SellButton(object sender, RoutedEventArgs e)

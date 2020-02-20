@@ -35,4 +35,11 @@ namespace StockTrader_.NET_Framework_
             price = Price;
         }
     }
+
+    class Portfolio
+    {
+        public float AvalibleFunds;
+        public float TotalAccountValue;
+        public float AmountOfShares;
+    }
 }
