@@ -1,47 +1,23 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        string currentCompany = "";
+        private string currentCompany = "";
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        //private void ButtonHandler(object sender, RoutedEventArgs e)
-        //{
-        //    FindData((string)sender.Tag);
-        //}
-
         private void ButtonHandler(object sender, RoutedEventArgs e)
         {
-            switch (sender.ToString())
-            {
-                case "System.Windows.Controls.Button: Apple": FindData("aapl"); break;
-                case "System.Windows.Controls.Button: Microsoft": FindData("msft"); break;
-                case "System.Windows.Controls.Button: Alphabet": FindData("goog"); break;
-                case "System.Windows.Controls.Button: Uber": FindData("uber"); break;
-                case "System.Windows.Controls.Button: Intel": FindData("intc"); break;
-                case "System.Windows.Controls.Button: IBM": FindData("ibm"); break;
-                case "System.Windows.Controls.Button: Facebook": FindData("fb"); break;
-                case "System.Windows.Controls.Button: WD": FindData("wdc"); break;
-                case "System.Windows.Controls.Button: Nvidia": FindData("nvda"); break;
-                case "System.Windows.Controls.Button: Oracle": FindData("orcl"); break;
-                case "System.Windows.Controls.Button: Amazon": FindData("amzn"); break;
-                case "System.Windows.Controls.Button: AMD": FindData("amd"); break;
-                case "System.Windows.Controls.Button: Dell": FindData("dell"); break;
-                case "System.Windows.Controls.Button: Adobe": FindData("adbe"); break;
-                case "System.Windows.Controls.Button: QinetiQ": FindData("qq"); break;
-                case "System.Windows.Controls.Button: Spotify": FindData("spot"); break;
-            }
+            FindData((string)((Button)sender).Tag);
         }
 
         private void FindData(string code)
@@ -58,8 +34,8 @@ namespace StockTrader_.NET_Framework_
             BuyBox newBuyBox = new BuyBox(Token);
             newBuyBox.Show();
             while (newBuyBox.complete == false) {}
-
-            Trader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount));
+            Trader newTrader = new Trader();
+            newTrader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount));
         }
 
         private void SellButton(object sender, RoutedEventArgs e)
