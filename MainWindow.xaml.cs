@@ -43,7 +43,8 @@ namespace StockTrader_.NET_Framework_
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            BuyBox win2 = new BuyBox();
+            win2.Show();
         }
 
         private void SellButton(object sender, RoutedEventArgs e)

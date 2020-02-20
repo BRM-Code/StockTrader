@@ -125,8 +125,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BuyBox.xaml.cs">
+      <DependentUpon>BuyBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Portfolio.cs" />
     <Compile Include="Trader.cs" />
+    <Page Include="BuyBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
