@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Buy" Height="400" Width="350">
     <Grid>
-        <Grid HorizontalAlignment="Left" Height="369" VerticalAlignment="Top" Width="342" Grid.RowSpan="3"/>
+        <Grid x:Name="Grid" HorizontalAlignment="Left" Height="369" VerticalAlignment="Top" Width="342" Grid.RowSpan="3"/>
 
         <Label Content="Buy" Grid.Row="0" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
         
@@ -15,6 +15,7 @@
         <TextBox HorizontalAlignment="Center" Height="23"   Text="Amount" VerticalAlignment="Top" Width="50" Grid.Row="1" Margin="200,35,92,0"/>
         
         <Label Content="Current Price:" HorizontalAlignment="Left" Margin="90,76.333,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <!-- update this! -->
         <Label x:Name="current" Content="£0"  HorizontalAlignment="Center" Margin="178,76,64,0" Grid.Row="1" VerticalAlignment="Top"/>
 
         <!--<Label Content="Total:" HorizontalAlignment="Left" Margin="133,20.333,0,0" Grid.Row="2" VerticalAlignment="Top" />

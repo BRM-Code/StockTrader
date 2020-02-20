@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -19,10 +20,12 @@ namespace StockTrader_.NET_Framework_
     /// </summary>
     public partial class BuyBox : Window
     {
-        public BuyBox()
+        public BuyBox(JToken datapoints)
         {
             InitializeComponent();
-            current.Content = ;
+
+            // this should be the only code here
+            current.Content = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
     }
 }

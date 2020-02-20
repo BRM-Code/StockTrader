@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -8,10 +9,17 @@ namespace StockTrader_.NET_Framework_
     /// </summary>
     public partial class MainWindow : Window
     {
+        string currentCompany = "";
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        //private void ButtonHandler(object sender, RoutedEventArgs e)
+        //{
+        //    FindData((string)sender.Tag);
+        //}
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
         {
@@ -36,15 +44,19 @@ namespace StockTrader_.NET_Framework_
             }
         }
 
-        private void FindData(string code) { 
+        private void FindData(string code)
+        {
+             currentCompany = code;
             var values = ApiCommunicator.CollectData(code);
             GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value)); }
+            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
+        }
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {
-            BuyBox win2 = new BuyBox();
-            win2.Show();
+            JToken Token = ApiCommunicator.CollectData(currentCompany);
+            BuyBox newBuyBox = new BuyBox(Token);
+            newBuyBox.Show();
         }
 
         private void SellButton(object sender, RoutedEventArgs e)
