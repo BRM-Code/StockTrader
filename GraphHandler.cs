@@ -22,13 +22,13 @@ namespace StockTrader_.NET_Framework_
                 Console.WriteLine("The API returned null (probably because you ran out of calls)");
                 return;
             }
+
             float[] y = new float[nodatapoints];
-            for (int i = 0; i < nodatapoints; )
+            for (int i = 0; i < nodatapoints; i++)
             {
-                y[i] = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[i]]["1. open"]);
-                i++;
+                y[i] = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[nodatapoints - i - 1]]["1. open"]);
             }
-          
+
             List<int> x = new List<int>();
             for (int i = 0; i < nodatapoints;)
             {
