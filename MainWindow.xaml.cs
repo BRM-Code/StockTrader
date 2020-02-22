@@ -9,6 +9,7 @@ namespace StockTrader_.NET_Framework_
     public partial class MainWindow : Window
     {
         private string currentCompany = "";
+        private Portfolio userPortfolio = new Portfolio();//TODO Create a system to sort out users portfolio/ Sort out Database
 
         public MainWindow()
         {
@@ -35,7 +36,7 @@ namespace StockTrader_.NET_Framework_
             newBuyBox.Show();
             while (newBuyBox.complete == false) {}
             Trader newTrader = new Trader();
-            newTrader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount));
+            newTrader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount), userPortfolio);
         }
 
         private void SellButton(object sender, RoutedEventArgs e)

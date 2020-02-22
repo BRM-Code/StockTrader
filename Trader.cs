@@ -11,26 +11,25 @@ namespace StockTrader_.NET_Framework_
 {
     class Trader
     {
-        public void Buy(string company, int Shares)
+        public void Buy(string company, int Shares,Portfolio userPortfolio)
         {
             float price = ApiCommunicator.CurrentPrice(company);
             JToken stuff = ApiCommunicator.CollectData(company);
             JObject info = stuff.ToObject<JObject>();
-            DateTime lastRefresh = (DateTime)info["Meta Data"]["3. Last Refreshed"];
-            StockStorage Buy = new StockStorage(lastRefresh,company,Shares,price);
+            StockStorage Buy = new StockStorage(company,Shares,price);
+            userPortfolio.AvalibleFunds -= price*Shares;
+            userPortfolio.ShareStockStorages.Add(company,Buy); //TODO potential problem here if the user has shares of that company
         }
     }
 
     class StockStorage
     {
-        public DateTime time;
         public string company;
         public int shares;
-        public float priceBought;
+        public float priceBought;//used to calculate if the user has made a loss or not on the share
 
-        public StockStorage(DateTime Time, string Company, int Shares, float Price)
+        public StockStorage(string Company, int Shares, float Price)
         {
-            time = Time;
             company = Company;
             shares = Shares;
             priceBought = Price;
@@ -39,16 +38,21 @@ namespace StockTrader_.NET_Framework_
 
     class Portfolio
     {
-        public float AvalibleFunds;
-        public Dictionary<string, StockStorage> ShareStockStorages;
+        public float AvalibleFunds;// how much money the account has available to spend on shares
+        public Dictionary<string, StockStorage> ShareStockStorages;// string is the companies codes and a StockStorage instance
+
+        public Portfolio()
+        {
+            AvalibleFunds = 50000;
+        }
 
         public float CalculateTotalAccountValue()
         {
             float TotalAccountValue = 0;
-            string[] keys = ShareStockStorages.Keys.ToArray();
+            string[] keys = ShareStockStorages.Keys.ToArray(); //Gets a array of the company's codes that the user has invested in
             for (int i = 0; i < keys.Length;)
             {
-                string company = keys[i];
+                string company = keys[i]; //gets the next company's code
                 TotalAccountValue = ApiCommunicator.CurrentPrice(company) + TotalAccountValue;
                 i++;
             }
