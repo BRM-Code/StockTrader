@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using InteractiveDataDisplay.WPF;
 using Newtonsoft.Json.Linq;
 
@@ -25,21 +26,33 @@ namespace StockTrader_.NET_Framework_
         public DateTime time;
         public string company;
         public int shares;
-        public float price;
+        public float priceBought;
 
         public StockStorage(DateTime Time, string Company, int Shares, float Price)
         {
             time = Time;
             company = Company;
             shares = Shares;
-            price = Price;
+            priceBought = Price;
         }
     }
 
     class Portfolio
     {
         public float AvalibleFunds;
-        public float TotalAccountValue;
-        public float AmountOfShares;
+        public Dictionary<string, StockStorage> ShareStockStorages;
+
+        public float CalculateTotalAccountValue()
+        {
+            float TotalAccountValue = 0;
+            string[] keys = ShareStockStorages.Keys.ToArray();
+            for (int i = 0; i < keys.Length;)
+            {
+                string company = keys[i];
+                TotalAccountValue = ApiCommunicator.CurrentPrice(company) + TotalAccountValue;
+                i++;
+            }
+            return TotalAccountValue;
+        }
     }
 }

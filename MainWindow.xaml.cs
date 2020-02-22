@@ -22,7 +22,7 @@ namespace StockTrader_.NET_Framework_
 
         private void FindData(string code)
         {
-             currentCompany = code;
+            currentCompany = code;
             var values = ApiCommunicator.CollectData(code);
             GraphHandler LineGraph = new GraphHandler(linegraph);
             LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));

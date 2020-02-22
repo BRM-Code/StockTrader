@@ -49,7 +49,6 @@ namespace StockTrader_.NET_Framework_
                 }
 
                 var values = responseJObject["Time Series (5min)"];
-                //converts the responseJObject into a string and then turns that string into a dictionary
                 return values;
         }
     }
