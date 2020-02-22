@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
         xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="Stock Trader" Height="720" Width="1280" >
+        Title="Stock Trader" Height="720" Width="1280" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
     <Grid>
         <Button Click="BuyButton"  Content="Buy" HorizontalAlignment="Left" Margin="400,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>
         <Button Click="SellButton"  Content="Sell" HorizontalAlignment="Left" Margin="500,600,0,0" VerticalAlignment="Top"  Height="40" Width="80"/>

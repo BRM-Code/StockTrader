@@ -31,6 +31,10 @@ namespace StockTrader_.NET_Framework_
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {
+            if (currentCompany == "")
+            {
+                return;
+            }
             JToken Token = ApiCommunicator.CollectData(currentCompany);
             BuyBox newBuyBox = new BuyBox(Token);
             newBuyBox.Show();
