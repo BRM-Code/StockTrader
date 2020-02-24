@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using Button = System.Windows.Controls.Button;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -10,9 +10,12 @@ namespace StockTrader_.NET_Framework_
     {
         private string currentCompany = "";
         private Portfolio userPortfolio = new Portfolio();//TODO Create a system to sort out users portfolio/ Sort out Database
+        private Timer updateTimer;
 
         public MainWindow()
         {
+            userPortfolio = new Portfolio();
+            StartTimer();
             InitializeComponent();
         }
 
@@ -35,8 +38,9 @@ namespace StockTrader_.NET_Framework_
             {
                 return;
             }
-            JToken Token = ApiCommunicator.CollectData(currentCompany);
-            BuyBox newBuyBox = new BuyBox(Token);
+
+            JToken token = ApiCommunicator.CollectData(currentCompany);
+            BuyBox newBuyBox = new BuyBox(token);
             newBuyBox.Show();
             while (newBuyBox.complete == false) {}
             Trader newTrader = new Trader();
@@ -46,6 +50,21 @@ namespace StockTrader_.NET_Framework_
         private void SellButton(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        
+
+        public void StartTimer()
+        {
+            updateTimer = new Timer();
+            updateTimer.Tick += new EventHandler(updateTimer_Tick);
+            updateTimer.Interval = 2000; // in miliseconds
+            updateTimer.Start();
+        }
+
+        private void updateTimer_Tick(object sender, EventArgs e)
+        {
+            avalibleFunds.Content = $"£{userPortfolio.AvailableFunds}";
         }
     }
 }
