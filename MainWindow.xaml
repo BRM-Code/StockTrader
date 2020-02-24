@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
         xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="Stock Trader" Height="720" Width="1280" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
+        Title="Stock Trader" Height="700" Width="1000" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -35,11 +35,11 @@
         <Button Click="BuyButton" Content="Buy" Grid.Column="3" Grid.Row="8" Height="40" Width="80"/>
         <Button Click="SellButton" Content="Sell" Grid.Column="4" Grid.Row="8" Height="40" Width="80"/>
 
-        <Label Content="Account Value:" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <Label Content="Available Funds:" Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Label Content="Account Value:" Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Label Content="Available Funds:" Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
-        <Label x:Name="accountValue" Content="£0" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <Label x:Name="avalibleFunds" Content="£0" Grid.Column="6" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label x:Name="accountValue" Content="£0" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label x:Name="avalibleFunds" Content="£0" Grid.Column="7" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <wpf:Chart BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="9" Grid.RowSpan="7"> 
             <wpf:LineGraph x:Name="linegraph" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
