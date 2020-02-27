@@ -17,6 +17,7 @@ namespace StockTrader_.NET_Framework_
             userPortfolio = new Portfolio();
             StartTimer();
             InitializeComponent();
+            ApiCommunicator.RotateProxy();
         }
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
@@ -27,7 +28,7 @@ namespace StockTrader_.NET_Framework_
         private void FindData(string code)
         {
             currentCompany = code;
-            var values = ApiCommunicator.CollectData(code);
+            var values = ApiCommunicator.CollectData(code,0);
             GraphHandler LineGraph = new GraphHandler(linegraph);
             LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
@@ -39,7 +40,7 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
 
-            JToken token = ApiCommunicator.CollectData(currentCompany);
+            JToken token = ApiCommunicator.CollectData(currentCompany,0);
             BuyBox newBuyBox = new BuyBox(token);
             newBuyBox.Show();
             while (newBuyBox.complete == false) {}
@@ -52,19 +53,18 @@ namespace StockTrader_.NET_Framework_
             throw new NotImplementedException();
         }
 
-        
-
         public void StartTimer()
         {
             updateTimer = new Timer();
             updateTimer.Tick += new EventHandler(updateTimer_Tick);
-            updateTimer.Interval = 2000; // in miliseconds
+            updateTimer.Interval = 2000;
             updateTimer.Start();
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             avalibleFunds.Content = $"£{userPortfolio.AvailableFunds}";
+            accountValue.Content = $"£{userPortfolio.CalculateTotalAccountValue()}";
         }
     }
 }

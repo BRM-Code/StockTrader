@@ -10,7 +10,7 @@ namespace StockTrader_.NET_Framework_
         public void Buy(string company, int Shares,Portfolio userPortfolio)
         {
             float price = ApiCommunicator.CurrentPrice(company);
-            JToken stuff = ApiCommunicator.CollectData(company);
+            JToken stuff = ApiCommunicator.CollectData(company,0);
             JObject info = stuff.ToObject<JObject>();
             StockStorage Buy = new StockStorage(company,Shares,price);
             userPortfolio.AvailableFunds -= price*Shares;
@@ -40,6 +40,7 @@ namespace StockTrader_.NET_Framework_
         public Portfolio()
         {
             AvailableFunds = 50000;
+            SharesDictionary = new Dictionary<string, StockStorage>();
         }
 
         public float CalculateTotalAccountValue()
