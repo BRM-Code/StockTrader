@@ -6,33 +6,30 @@ namespace StockTrader_.NET_Framework_
 {
     class DatabaseHandler
     {
-        private const string connectionString = "";
+        //Since we are using only one database, we can declare the SqlConnection Object as a class wide variable
+        private readonly SqlConnection _sqlConnection = new SqlConnection("server=db.jakewalker.xyz;database=benrm1;user=benrm;password=tiWuSIMo4IBo");
 
-        public Portfolio RetrievePortfolio()
+        public Portfolio RetrievePortfolio()//Connects to the Database and gets the entry with the highest Id which is the latest
         {
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
-            string query = "SELECT * FROM portfoliodb ORDER BY id DESC LIMIT 1";
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            _sqlConnection.Open();
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM portfoliodb ORDER BY Id DESC LIMIT 1", _sqlConnection);
             SqlDataReader dataReader = sqlCommand.ExecuteReader();
-            string portfolio = dataReader.GetValue(1).ToString();
-
-            sqlConnection.Close();
+            _sqlConnection.Close();
+            
+            JObject portfolioJObject = (JObject)JToken.FromObject(dataReader.GetValue(1));
+            Portfolio portfolio = portfolioJObject.ToObject<Portfolio>();//casts the JObject to the portfolio class
+            return portfolio;
         }
 
         public void SavePortfolio(Portfolio userPortfolio)
         {
-            DateTime currentDateTime = DateTime.Now;
+            DateTime currentDateTime = DateTime.Now;//This may get used in the future
             JObject portfolioJObject = (JObject)JToken.FromObject(userPortfolio);
-            Console.WriteLine($"JSON about to be saved: ",portfolioJObject);
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
-            string query = "INSERT INTO portfoliodb (EntryDate, PortfolioObject) values('"+currentDateTime+"','"+portfolioJObject+"')";
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+            string query = "INSERT INTO portfoliodb (EntryDate, PortfolioObject) values('" + currentDateTime + "','" + portfolioJObject + "')";
             SqlDataAdapter adapter = new SqlDataAdapter();
-            adapter.InsertCommand = new SqlCommand(query, sqlConnection);
-            sqlCommand.Dispose();
-            sqlConnection.Close();
+            _sqlConnection.Open();
+            adapter.InsertCommand = new SqlCommand(query, _sqlConnection);
+            _sqlConnection.Close();
         }
     }
 }
