@@ -9,7 +9,7 @@ namespace StockTrader_.NET_Framework_
     public partial class MainWindow : Window
     {
         private string currentCompany = "";
-        private Portfolio userPortfolio = new Portfolio();//TODO Create a system to sort out users portfolio/ Sort out Database
+        private Portfolio userPortfolio;    //TODO Create a system to sort out users portfolio/ Sort out Database
         private Timer updateTimer;
 
         public MainWindow()
