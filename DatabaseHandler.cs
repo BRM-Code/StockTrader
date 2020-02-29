@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Windows;
 using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
@@ -11,6 +12,7 @@ namespace StockTrader_.NET_Framework_
 
         public Portfolio RetrievePortfolio()//Connects to the Database and gets the entry with the highest Id which is the latest
         {
+            MessageBox.Show("Connecting to Database...", "Waiting");
             _sqlConnection.Open();
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM portfoliodb ORDER BY Id DESC LIMIT 1", _sqlConnection);
             SqlDataReader dataReader = sqlCommand.ExecuteReader();

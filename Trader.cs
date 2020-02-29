@@ -18,7 +18,7 @@ namespace StockTrader_.NET_Framework_
         }
     }
 
-    class StockStorage
+    public class StockStorage
     {
         public string company;
         public int shares;
@@ -32,7 +32,7 @@ namespace StockTrader_.NET_Framework_
         }
     }
 
-    class Portfolio
+    public class Portfolio
     {
         public float AvailableFunds;// how much money the account has available to spend on shares
         public Dictionary<string, StockStorage> SharesDictionary;// string is the companies codes and a StockStorage instance

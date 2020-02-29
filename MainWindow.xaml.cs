@@ -3,18 +3,20 @@ using System.Windows;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
 {
     public partial class MainWindow : Window
     {
-        private string currentCompany = "";
-        private Portfolio userPortfolio;    //TODO Create a system to sort out users portfolio/ Sort out Database
+        public static string currentCompany = "";
+        public static Portfolio UserPortfolio; 
         private Timer updateTimer;
+        private readonly DatabaseHandler database = new DatabaseHandler();
 
         public MainWindow()
         {
-            userPortfolio = new Portfolio();
+            UserPortfolio = database.RetrievePortfolio();
             StartTimer();
             InitializeComponent();
             ApiCommunicator.RotateProxy();
@@ -37,15 +39,13 @@ namespace StockTrader_.NET_Framework_
         {
             if (currentCompany == "")
             {
+                MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
 
             JToken token = ApiCommunicator.CollectData(currentCompany,0);
             BuyBox newBuyBox = new BuyBox(token);
             newBuyBox.Show();
-            while (newBuyBox.complete == false) {}
-            Trader newTrader = new Trader();
-            newTrader.Buy(currentCompany, Convert.ToInt32(newBuyBox.SharesAmount), userPortfolio);
         }
 
         private void SellButton(object sender, RoutedEventArgs e)
@@ -63,8 +63,14 @@ namespace StockTrader_.NET_Framework_
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
-            avalibleFunds.Content = $"£{userPortfolio.AvailableFunds}";
-            accountValue.Content = $"£{userPortfolio.CalculateTotalAccountValue()}";
+            avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
+            accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
+        }
+
+        void MainWindow_Closed(object sender, EventArgs e)
+        {
+            database.SavePortfolio(UserPortfolio);
+            MessageBox.Show("User portfolio successfully uploaded!", "Success");
         }
     }
 }
