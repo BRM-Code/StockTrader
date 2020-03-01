@@ -19,7 +19,7 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = database.RetrievePortfolio();
             StartTimer();
             InitializeComponent();
-            ApiCommunicator.RotateProxy();
+            //ApiCommunicator.RotateProxy();
         }
 
         private void ButtonHandler(object sender, RoutedEventArgs e)

@@ -8,7 +8,7 @@ namespace StockTrader_.NET_Framework_
 {
     class GraphHandler
     {
-        public LineGraph LineGraph;
+        private readonly LineGraph LineGraph;
 
         public GraphHandler(LineGraph linegraph)
         {
@@ -17,9 +17,8 @@ namespace StockTrader_.NET_Framework_
 
         public void Draw(JToken datapoints, int nodatapoints)
         {
-            if (datapoints == null)
+            if (datapoints == null || nodatapoints == 0)
             {
-                Console.WriteLine("The API returned null (probably because you ran out of calls)");
                 return;
             }
 
@@ -35,7 +34,7 @@ namespace StockTrader_.NET_Framework_
                 x.Add(i);
                 i++;
             }
-            LineGraph.Plot(x, y); // x and y are IEnumerable<double>
+            LineGraph.Plot(x, y);
             return;
         }
     }
