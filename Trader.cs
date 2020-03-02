@@ -10,7 +10,7 @@ namespace StockTrader_.NET_Framework_
         public void Buy(string company, int Shares,Portfolio userPortfolio)
         {
             float price = ApiCommunicator.CurrentPrice(company);
-            JToken stuff = ApiCommunicator.CollectData(company,0);
+            JToken stuff = ApiCommunicator.CollectData(company);
             JObject info = stuff.ToObject<JObject>();
             StockStorage Buy = new StockStorage(company,Shares,price);
             userPortfolio.AvailableFunds -= price*Shares;
