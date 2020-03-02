@@ -7,19 +7,18 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        public static string currentCompany = "";
+        public static string CurrentCompany = "";
         public static Portfolio UserPortfolio; 
-        private Timer updateTimer;
-        private readonly DatabaseHandler database = new DatabaseHandler();
+        private Timer _updateTimer;
+        private readonly DatabaseHandler _database = new DatabaseHandler();
 
         public MainWindow()
         {
-            UserPortfolio = database.RetrievePortfolio();
+            UserPortfolio = _database.RetrievePortfolio();
             StartTimer();
             InitializeComponent();
-            //ApiCommunicator.RotateProxy();
         }
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
@@ -29,21 +28,21 @@ namespace StockTrader_.NET_Framework_
 
         private void FindData(string code)
         {
-            currentCompany = code;
-            var values = ApiCommunicator.CollectData(code);
-            GraphHandler LineGraph = new GraphHandler(linegraph);
-            LineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
+            CurrentCompany = code;
+            var values = Api.CollectData(code);
+            GraphHandler lineGraph = new GraphHandler(linegraph);
+            lineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {
-            if (currentCompany == "")
+            if (CurrentCompany == "")
             {
                 MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
 
-            JToken token = ApiCommunicator.CollectData(currentCompany);
+            JToken token = Api.CollectData(CurrentCompany);
             BuyBox newBuyBox = new BuyBox(token);
             newBuyBox.Show();
         }
@@ -53,23 +52,23 @@ namespace StockTrader_.NET_Framework_
             throw new NotImplementedException();
         }
 
-        public void StartTimer()
+        private void StartTimer()
         {
-            updateTimer = new Timer();
-            updateTimer.Tick += new EventHandler(updateTimer_Tick);
-            updateTimer.Interval = 2000;
-            updateTimer.Start();
+            _updateTimer = new Timer();
+            _updateTimer.Tick += ValueUpdater;
+            _updateTimer.Interval = 12000;
+            _updateTimer.Start();
         }
 
-        private void updateTimer_Tick(object sender, EventArgs e)
+        private void ValueUpdater(object sender, EventArgs e)
         {
             avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
         }
 
-        void MainWindow_Closed(object sender, EventArgs e)
+        private void Window_Closed(object sender, EventArgs e)
         {
-            database.SavePortfolio(UserPortfolio);
+            _database.SavePortfolio(UserPortfolio);
             MessageBox.Show("User portfolio successfully uploaded!", "Success");
         }
     }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
         xmlns:wpf="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
+        Closed="Window_Closed"
         Title="Stock Trader" Height="700" Width="1000" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>

@@ -1,34 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
     class Trader
     {
-        public void Buy(string company, int Shares,Portfolio userPortfolio)
+        public void Buy(string company, int shares,Portfolio userPortfolio)
         {
-            float price = ApiCommunicator.CurrentPrice(company);
-            JToken stuff = ApiCommunicator.CollectData(company);
-            JObject info = stuff.ToObject<JObject>();
-            StockStorage Buy = new StockStorage(company,Shares,price);
-            userPortfolio.AvailableFunds -= price*Shares;
-            userPortfolio.SharesDictionary.Add(company,Buy); //TODO potential problem here if the user has shares of that company
+            float price = Api.CurrentPrice(company);
+            StockStorage buy = new StockStorage(company,shares,price);
+            userPortfolio.AvailableFunds -= price*shares;
+            userPortfolio.SharesDictionary.Add(company,buy); //TODO potential problem here if the user has shares of that company
         }
     }
 
     public class StockStorage
     {
-        public string company;
-        public int shares;
-        public float priceBought;//used to calculate if the user has made a loss or not on the share
+        public string Company;
+        public int Shares;
+        public float PriceBought;//used to calculate if the user has made a loss or not on the share
 
-        public StockStorage(string Company, int Shares, float Price)
+        public StockStorage(string company, int shares, float price)
         {
-            company = Company;
-            shares = Shares;
-            priceBought = Price;
+            this.Company = company;
+            this.Shares = shares;
+            PriceBought = price;
         }
     }
 
@@ -45,15 +41,15 @@ namespace StockTrader_.NET_Framework_
 
         public float CalculateTotalAccountValue()
         {
-            float TotalAccountValue = 0;
-            string[] keys = SharesDictionary.Keys.ToArray(); //Gets a array of the company's codes that the user has invested in
+            float totalAccountValue = 0;
+            string[] keys = SharesDictionary.Keys.ToArray();
+            StockStorage[] shares = SharesDictionary.Values.ToArray();
             for (int i = 0; i < keys.Length;)
             {
-                string company = keys[i]; //gets the next company's code
-                TotalAccountValue = ApiCommunicator.CurrentPrice(company) + TotalAccountValue;
+                totalAccountValue = Api.CurrentPrice(keys[i]) *shares[i].Shares + totalAccountValue;
                 i++;
             }
-            return TotalAccountValue;
+            return totalAccountValue;
         }
     }
 }

@@ -8,11 +8,11 @@ namespace StockTrader_.NET_Framework_
 {
     class GraphHandler
     {
-        private readonly LineGraph LineGraph;
+        private readonly LineGraph _lineGraph;
 
         public GraphHandler(LineGraph linegraph)
         {
-            LineGraph = linegraph;
+            _lineGraph = linegraph;
         }
 
         public void Draw(JToken datapoints, int nodatapoints)
@@ -34,8 +34,7 @@ namespace StockTrader_.NET_Framework_
                 x.Add(i);
                 i++;
             }
-            LineGraph.Plot(x, y);
-            return;
+            _lineGraph.Plot(x, y);
         }
     }
 }

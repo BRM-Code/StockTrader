@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    public partial class BuyBox : Window
+    public partial class BuyBox
     {
         public BuyBox(JToken datapoints)
         {
@@ -18,7 +18,7 @@ namespace StockTrader_.NET_Framework_
         {
             int noshares = Convert.ToInt32((SharesAmount.Text));
             Trader newTrader = new Trader();
-            newTrader.Buy(MainWindow.currentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+            newTrader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
             this.Close();
         }
     }
