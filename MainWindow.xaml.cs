@@ -66,7 +66,7 @@ namespace StockTrader_.NET_Framework_
             accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void OnClosing(object sender, EventArgs e)
         {
             _database.SavePortfolio(UserPortfolio);
             MessageBox.Show("User portfolio successfully uploaded!", "Success");

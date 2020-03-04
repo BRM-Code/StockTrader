@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
@@ -23,6 +25,7 @@ namespace StockTrader_.NET_Framework_
             JToken valuesJToken = Api.GetResponse(url);
             if (valuesJToken == null)
             {
+                Console.WriteLine("Switching Proxy");
                 _proxyKeyPairIndex++;
                 Api.CollectData(company);
             }
@@ -36,42 +39,41 @@ namespace StockTrader_.NET_Framework_
             return value;
         }
 
-        private static JToken GetResponse(Uri uri)
+        public static JToken GetResponse(Uri uri)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            WebProxy myproxy = new WebProxy(ProxyKeyPairDictionary.Values.ToArray()[_proxyKeyPairIndex], 443);
-            myproxy.BypassProxyOnLocal = false;
-            request.Proxy = myproxy;
-            request.Method = "GET";
-            request.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
-            HttpWebResponse response;
+            WebProxy myProxy = new WebProxy();
+            Uri newUri = new Uri($"http://{ProxyKeyPairDictionary.Values.ToArray()[_proxyKeyPairIndex]}");
+            using var wb = new WebClient();
+            myProxy.Address = newUri;
+            myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
+            wb.Proxy = myProxy;
+            string APIresponse;
             try
-            {
-                response = (HttpWebResponse)request.GetResponse();
-            }
+            { APIresponse = wb.DownloadString(uri); }
             catch
             {
-                MessageBox.Show("We didn't get a response, please check your internet connection", "Error");
+                Console.WriteLine("The API isn't calling me back :(");
                 return null;
             }
-            JObject responseJObject = JObject.Parse(response.ToString());
+            JObject responseJObject = JObject.Parse(APIresponse);
             try
             {
                 DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
-                var values = responseJObject["Time Series (5min)"];
-                return values;
             }
             catch
             {
                 return null;
             }
+
+            var values = responseJObject["Time Series (5min)"];
+            return values;
         }
 
         private static Uri CreateUrl(string company)
         {
             using var wb = new WebClient();
             UriBuilder uribuild = new UriBuilder();//Setting up the UriBuilder
-            uribuild.Host = "https://www.alphavantage.co/query";
+            uribuild.Host = "www.alphavantage.co/query";
             try { uribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_proxyKeyPairIndex]}"; }
             catch
             {
