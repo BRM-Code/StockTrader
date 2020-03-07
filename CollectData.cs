@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
@@ -47,15 +45,15 @@ namespace StockTrader_.NET_Framework_
             myProxy.Address = newUri;
             myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
             wb.Proxy = myProxy;
-            string APIresponse;
+            string apIresponse;
             try
-            { APIresponse = wb.DownloadString(uri); }
+            { apIresponse = wb.DownloadString(uri); }
             catch
             {
                 Console.WriteLine("The API isn't calling me back :(");
                 return null;
             }
-            JObject responseJObject = JObject.Parse(APIresponse);
+            JObject responseJObject = JObject.Parse(apIresponse);
             try
             {
                 DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];

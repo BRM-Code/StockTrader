@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -7,10 +8,32 @@ namespace StockTrader_.NET_Framework_
     {
         public void Buy(string company, int shares,Portfolio userPortfolio)
         {
-            float price = Api.CurrentPrice(company);
-            StockStorage buy = new StockStorage(company,shares,price);
-            userPortfolio.AvailableFunds -= price*shares;
-            userPortfolio.SharesDictionary.Add(company,buy); //TODO potential problem here if the user has shares of that company
+            if (userPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
+            {
+                userPortfolio.SharesDictionary[company].Shares += shares;
+                userPortfolio.AvailableFunds -= Api.CurrentPrice(company) * shares;
+                return;
+            }
+            StockStorage buy = new StockStorage(company,shares, Api.CurrentPrice(company));
+            userPortfolio.AvailableFunds -= Api.CurrentPrice(company) * shares;
+            userPortfolio.SharesDictionary.Add(company,buy);
+        }
+
+        public void Sell(string company, int shares, Portfolio userPortfolio)
+        {
+            if (!userPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
+            {
+                MessageBox.Show("You don't own any stocks from that company", "Error");
+                return;
+            }
+
+            if (userPortfolio.SharesDictionary[company].Shares < shares)//Checks that the user isn't trying to sell more stocks than they own
+            {
+                MessageBox.Show("Trying to sell more shares than in your possession", "Error");
+                return;
+            }
+            userPortfolio.SharesDictionary[company].Shares -= shares;//removes the number of shares from that companies in the dictionary
+            userPortfolio.AvailableFunds += Api.CurrentPrice(company) * shares;//add the value of the sold stocks to the users available funds
         }
     }
 
