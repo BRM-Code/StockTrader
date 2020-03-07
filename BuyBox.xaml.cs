@@ -8,17 +8,37 @@ namespace StockTrader_.NET_Framework_
 {
     public partial class BuyBox
     {
-        public BuyBox(JToken datapoints)
+        private bool _IsBuyBox;
+
+        public BuyBox(JToken Datapoints, bool IsBuyBox)
         {
+            _IsBuyBox = IsBuyBox;
             InitializeComponent();
-            current.Content = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            switch (_IsBuyBox)
+            {
+                case true:
+                    Title.Content = "Buy";
+                    break;
+                case false:
+                    Title.Content = "Sell";
+                    break;
+            }
+            current.Content = Convert.ToSingle(Datapoints[Datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
 
         private void Submit(object sender, RoutedEventArgs e)
         {
             int noshares = Convert.ToInt32((SharesAmount.Text));
             Trader newTrader = new Trader();
-            newTrader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+            switch (_IsBuyBox)
+            {
+                case true:
+                    newTrader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+                    break;
+                case false:
+                    newTrader.Sell(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+                    break;
+            }
             this.Close();
         }
     }

@@ -36,20 +36,24 @@ namespace StockTrader_.NET_Framework_
 
         private void BuyButton(object sender, RoutedEventArgs e)
         {
+            TraderButtonHandler(true);
+        }
+
+        private void SellButton(object sender, RoutedEventArgs e)
+        {
+            TraderButtonHandler(false);
+        }
+
+        private void TraderButtonHandler(bool IsBuyBox)
+        {
             if (CurrentCompany == "")
             {
                 MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
-
             JToken token = Api.CollectData(CurrentCompany);
-            BuyBox newBuyBox = new BuyBox(token);
+            BuyBox newBuyBox = new BuyBox(token, IsBuyBox);
             newBuyBox.Show();
-        }
-
-        private void SellButton(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void StartTimer()
