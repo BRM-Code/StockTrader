@@ -52,7 +52,7 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
             JToken token = Api.CollectData(CurrentCompany);
-            BuyBox newBuyBox = new BuyBox(token, IsBuyBox);
+            BuyBox newBuyBox = new BuyBox(IsBuyBox);
             newBuyBox.Show();
         }
 

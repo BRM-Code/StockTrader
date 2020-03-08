@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
     public partial class BuyBox
     {
-        private bool _IsBuyBox;
+        private readonly bool _IsBuyBox;
 
-        public BuyBox(JToken Datapoints, bool IsBuyBox)
+        public BuyBox(bool isBuyBox)
         {
-            _IsBuyBox = IsBuyBox;
+            _IsBuyBox = isBuyBox;
             InitializeComponent();
             switch (_IsBuyBox)
             {
@@ -23,7 +20,7 @@ namespace StockTrader_.NET_Framework_
                     Title.Content = "Sell";
                     break;
             }
-            current.Content = Convert.ToSingle(Datapoints[Datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            current.Content = Api.CurrentPrice(MainWindow.CurrentCompany);
         }
 
         private void Submit(object sender, RoutedEventArgs e)

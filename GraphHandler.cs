@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    class GraphHandler
+    internal class GraphHandler
     {
         private readonly LineGraph _lineGraph;
 
