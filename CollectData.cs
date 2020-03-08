@@ -9,7 +9,7 @@ namespace StockTrader_.NET_Framework_
 {
     static class Api
     {
-        private static readonly Dictionary<string, string> _ProxyKeyPairDictionary = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> ProxyKeyPairDictionary = new Dictionary<string, string>
         {
             {"Q4AZUW80DHGKUS3A","alpha.proxy.vh7.uk"},
             {"7DHN0TYZEJN6K0AR","bravo.proxy.vh7.uk"},
@@ -29,17 +29,17 @@ namespace StockTrader_.NET_Framework_
             }
             return valuesJToken;
         }
-
+        
         public static float CurrentPrice(string company)
         {
             float value = Convert.ToSingle(CollectData(company)[CollectData(company).ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
             return value;
         }
-
+        
         private static JToken GetResponse(Uri uri)
         {
             WebProxy myProxy = new WebProxy();
-            Uri newUri = new Uri($"http://{_ProxyKeyPairDictionary.Values.ToArray()[_proxyKeyPairIndex]}");
+            Uri newUri = new Uri($"http://{ProxyKeyPairDictionary.Values.ToArray()[_proxyKeyPairIndex]}");
             using var wb = new WebClient();
             myProxy.Address = newUri;
             myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
@@ -53,24 +53,20 @@ namespace StockTrader_.NET_Framework_
                 return null;
             }
             JObject responseJObject = JObject.Parse(apIresponse);
-            try
-            {
-                DateTime lastRefresh = (DateTime)responseJObject["Meta Data"]["3. Last Refreshed"];
-            }
-            catch
+            if ((string)responseJObject["Meta Data"]["3. Last Refreshed"] != "5min")
             {
                 return null;
             }
             var values = responseJObject["Time Series (5min)"];
             return values;
         }
-
+        
         private static Uri CreateUrl(string company)
         {
             using var wb = new WebClient();
             UriBuilder uribuild = new UriBuilder();//Setting up the UriBuilder
             uribuild.Host = "www.alphavantage.co/query";
-            try { uribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={_ProxyKeyPairDictionary.Keys.ToArray()[_proxyKeyPairIndex]}"; }
+            try { uribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_proxyKeyPairIndex]}"; }
             catch
             {
                 MessageBox.Show("Ran out of API keys that work", "Error");
