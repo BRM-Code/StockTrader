@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 
@@ -30,6 +31,11 @@ namespace StockTrader_.NET_Framework_
         {
             CurrentCompany = code;
             var values = Api.CollectData(code);
+            currentCompany.Content = code;
+            currentPrice.Content = Api.CurrentPrice(code);
+            highLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["2. high"]);
+            lowLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["3. low"]);
+            volume.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["5. volume"]);
             GraphHandler lineGraph = new GraphHandler(linegraph);
             lineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
@@ -44,15 +50,14 @@ namespace StockTrader_.NET_Framework_
             TraderButtonHandler(false);
         }
 
-        private void TraderButtonHandler(bool IsBuyBox)
+        private void TraderButtonHandler(bool isBuyBox)
         {
             if (CurrentCompany == "")
             {
                 MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
-            JToken token = Api.CollectData(CurrentCompany);
-            BuyBox newBuyBox = new BuyBox(IsBuyBox);
+            BuyBox newBuyBox = new BuyBox(isBuyBox);
             newBuyBox.Show();
         }
 

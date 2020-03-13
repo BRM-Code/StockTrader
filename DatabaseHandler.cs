@@ -20,16 +20,15 @@ namespace StockTrader_.NET_Framework_
             {
                 MySqlCommand sqlCommand = new MySqlCommand("SELECT * FROM portfoliodb ORDER BY Id DESC LIMIT 1", _sqlConnection);
                 _dataReader = sqlCommand.ExecuteReader();
-                _sqlConnection.Close();
                 JObject portfolioJObject = (JObject)JToken.FromObject(_dataReader.GetValue(1));
                 _portfolio = portfolioJObject.ToObject<Portfolio>();//casts the JObject to the portfolio class
             }
             catch
             {
-                _sqlConnection.Close();
                 MessageBox.Show("Database empty, creating new Portfolio", "");
                 _portfolio = new Portfolio();
             }
+            _sqlConnection.Close();
             return _portfolio;
         }
 
@@ -38,9 +37,9 @@ namespace StockTrader_.NET_Framework_
             DateTime currentDateTime = DateTime.Now;//This may get used in the future
             JObject portfolioJObject = (JObject)JToken.FromObject(userPortfolio);
             string query = "INSERT INTO portfoliodb (EntryDate, PortfolioObject) values('" + currentDateTime + "','" + portfolioJObject + "')";
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            var command = new MySqlCommand(query, _sqlConnection);
             _sqlConnection.Open();
-            adapter.InsertCommand = new MySqlCommand(query, _sqlConnection);
+            command.ExecuteNonQuery();
             _sqlConnection.Close();
         }
     }

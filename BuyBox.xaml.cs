@@ -5,13 +5,13 @@ namespace StockTrader_.NET_Framework_
 {
     public partial class BuyBox
     {
-        private readonly bool _IsBuyBox;
+        private readonly bool _isBuyBox;
 
         public BuyBox(bool isBuyBox)
         {
-            _IsBuyBox = isBuyBox;
+            _isBuyBox = isBuyBox;
             InitializeComponent();
-            switch (_IsBuyBox)
+            switch (_isBuyBox)
             {
                 case true:
                     Title.Content = "Buy";
@@ -27,7 +27,7 @@ namespace StockTrader_.NET_Framework_
         {
             int noshares = Convert.ToInt32((SharesAmount.Text));
             Trader newTrader = new Trader();
-            switch (_IsBuyBox)
+            switch (_isBuyBox)
             {
                 case true:
                     newTrader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
