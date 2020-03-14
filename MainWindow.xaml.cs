@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Button = System.Windows.Controls.Button;
@@ -11,13 +9,12 @@ namespace StockTrader_.NET_Framework_
     public partial class MainWindow
     {
         public static string CurrentCompany = "";
-        public static Portfolio UserPortfolio; 
+        public static Portfolio UserPortfolio;
         private Timer _updateTimer;
-        private readonly DatabaseHandler _database = new DatabaseHandler();
 
-        public MainWindow()
+        public MainWindow(Portfolio userPortfolio)
         {
-            UserPortfolio = _database.RetrievePortfolio();
+            UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
         }
@@ -32,10 +29,10 @@ namespace StockTrader_.NET_Framework_
             CurrentCompany = code;
             var values = Api.CollectData(code);
             currentCompany.Content = code;
-            currentPrice.Content = Api.CurrentPrice(code);
-            highLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["2. high"]);
-            lowLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["3. low"]);
-            volume.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["5. volume"]);
+            currentPrice.Content = Api.FetchData(code,"1. open");
+            highLabel.Content = Api.FetchData(code, "2. high");
+            lowLabel.Content = Api.FetchData(code, "3. low");
+            volume.Content = Api.FetchData(code, "5. volume");
             GraphHandler lineGraph = new GraphHandler(linegraph);
             lineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
@@ -77,8 +74,14 @@ namespace StockTrader_.NET_Framework_
 
         private void OnClosing(object sender, EventArgs e)
         {
-            _database.SavePortfolio(UserPortfolio);
-            MessageBox.Show("User portfolio successfully uploaded!", "Success");
+            Startup.UserPortfolio = UserPortfolio;
+        }
+
+        private void OpenSettings(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.Show();
+            this.Close();
         }
     }
 }

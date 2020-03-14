@@ -55,11 +55,11 @@
         <Label Content="Volume:" Grid.Column="9" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <Label x:Name="volume" Content="0" Grid.Column="10" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-        <wpf:Chart BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="7"> 
+        <wpf:Chart BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
             <wpf:LineGraph x:Name="linegraph" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
         </wpf:Chart>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" HorizontalAlignment="Center" Width="200">
+        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
             <Button Content="Apple" Tag="aapl" Click="ButtonHandler" Height="40" Margin="40,0,40,0"/>
             <Button Content="Microsoft" Tag="msft" Click="ButtonHandler" Height="40" Margin="40,0,40,0"/>
             <Button Content="Alphabet" Tag="goog" Click="ButtonHandler" Height="40" Margin="40,0,40,0"/>
@@ -79,5 +79,6 @@
         </StackPanel>
         <TextBox Text="{Binding ElementName=nodatapointslider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Grid.Row="8" Height="20" Width="30" HorizontalAlignment="Left" Margin="-40"/>
         <Slider x:Name="nodatapointslider" Maximum="100" Minimum="1" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="2"/>
+        <Button Click="OpenSettings" Content="Settings" Grid.Column="10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"/>
     </Grid>
 </Window>

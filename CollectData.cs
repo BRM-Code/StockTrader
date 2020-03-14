@@ -33,11 +33,11 @@ namespace StockTrader_.NET_Framework_
             return valuesJToken;
         }
 
-        public static float CurrentPrice(string company)
+        public static float FetchData(string company,string value)
         {
             JToken data = CollectData(company);
-            float value = Convert.ToSingle(data[data.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
-            return value;
+            var dataitem = Convert.ToSingle(data[data.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]][value]);
+            return dataitem;
         }
 
         private static JToken GetResponse(Uri uri)

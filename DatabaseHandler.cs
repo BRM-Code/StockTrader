@@ -5,10 +5,10 @@ using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    class DatabaseHandler
+    public class DatabaseHandler
     {
         //Since we are using only one database, we can declare the MySqlConnection Object as a class wide variable
-        private readonly MySqlConnection _sqlConnection = new MySqlConnection("server=db.jakewalker.xyz;database=benrm1;uid=benrm;password=tiWuSIMo4IBo");
+        private readonly MySqlConnection _sqlConnection = new MySqlConnection($"server={Startup.Settings.SQLServer};database={Startup.Settings.SQLDatabase};uid={Startup.Settings.SQLUser};password={Startup.Settings.SQLPassword}");
         private MySqlDataReader _dataReader;
         private Portfolio _portfolio;
 
