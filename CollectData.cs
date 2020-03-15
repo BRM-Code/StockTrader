@@ -78,7 +78,12 @@ namespace StockTrader_.NET_Framework_
             using var wb = new WebClient();
             UriBuilder uribuild = new UriBuilder();//Setting up the UriBuilder
             uribuild.Host = "www.alphavantage.co/query";
-            try { uribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_activePairs[0]]}"; }
+            string extraDataParameter = "";
+            if (Startup.Settings.ExtremeData)
+            {
+                extraDataParameter = "&outputsize=full";
+            }
+            try { uribuild.Query = $"function=TIME_SERIES_INTRADAY&symbol={company}&interval=5min{extraDataParameter}&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_activePairs[0]]}"; }
             catch
             {
                 MessageBox.Show("Ran out of API keys that work", "Error");

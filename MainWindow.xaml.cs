@@ -17,6 +17,10 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
+            if (!Startup.Settings.ExtremeData) return;
+            extremeDataWarning.Visibility = Visibility.Visible;
+            nodatapointslider.Maximum = 1160;
+            nodatapointslider.TickFrequency = 100;
         }
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
@@ -62,7 +66,7 @@ namespace StockTrader_.NET_Framework_
         {
             _updateTimer = new Timer();
             _updateTimer.Tick += ValueUpdater;
-            _updateTimer.Interval = 12000;
+            _updateTimer.Interval = 60000;
             _updateTimer.Start();
         }
 

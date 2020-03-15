@@ -35,11 +35,12 @@
 
         <Label Content="Graph" FontStyle="Italic" FontSize="30" VerticalAlignment="Top" HorizontalAlignment="Left"  Grid.Row="1" Grid.Column="1"/>
         <Label Content="Extreme Data :" Grid.ColumnSpan="2" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="1"/>
-        <CheckBox Grid.Column="3" HorizontalAlignment="Left" Margin="10,14,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <CheckBox x:Name="ExtremeDataCheckBox" Grid.Column="3" HorizontalAlignment="Left" Margin="10,14,0,0" Grid.Row="2" VerticalAlignment="Top"/>
 
         <Label Content="SQL" FontStyle="Italic" FontSize="30" VerticalAlignment="Top" HorizontalAlignment="Left"  Grid.Row="1" Grid.Column="5"/>
         <Label Content="Server Address :" Grid.ColumnSpan="2" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="5"/>
-        <TextBox x:Name="ServerAddressEntry" Grid.ColumnSpan="2" Grid.Column="7" HorizontalAlignment="Left" Height="23" Margin="5,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="160"/>
+        <TextBox TextChanged="ServerAddressEntry_OnTextChanged" x:Name="ServerAddressEntry" Grid.ColumnSpan="2" Grid.Column="7" HorizontalAlignment="Left" Height="23" Margin="5,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="160"/>
+        <Label Content="Invalid Addresss" Grid.ColumnSpan="2" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="8" Foreground="#fc0f03" Visibility="Hidden" x:Name="Invalidlabel"/>
         <Label Content="Database Name :" Grid.ColumnSpan="2" FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="5"/>
         <TextBox x:Name="DatabaseEntry" Grid.ColumnSpan="2" Grid.Column="7" HorizontalAlignment="Left" Height="22" Margin="5,48,0,0" Grid.Row="2" VerticalAlignment="Top" Width="160"/>
         <Label Content="Username :" Grid.ColumnSpan="2" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Right"  Grid.Row="3" Grid.Column="5"/>
