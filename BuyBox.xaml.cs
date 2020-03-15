@@ -20,7 +20,7 @@ namespace StockTrader_.NET_Framework_
                     Title.Content = "Sell";
                     break;
             }
-            current.Content = Api.FetchData(MainWindow.CurrentCompany, "1. open");
+            current.Content = Api.FetchData(MainWindow.CurrentCompany, "1. open","Daily");
         }
 
         private void Submit(object sender, RoutedEventArgs e)

@@ -11,11 +11,11 @@ namespace StockTrader_.NET_Framework_
             if (userPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
             {
                 userPortfolio.SharesDictionary[company].Shares += shares;
-                userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open") * shares;
+                userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open","Daily") * shares;
                 return;
             }
-            StockStorage buy = new StockStorage(company,shares, Api.FetchData(company, "1. open"));
-            userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open") * shares;
+            StockStorage buy = new StockStorage(company,shares, Api.FetchData(company, "1. open", "Daily"));
+            userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open", "Daily") * shares;
             userPortfolio.SharesDictionary.Add(company,buy);
         }
 
@@ -33,7 +33,7 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
             userPortfolio.SharesDictionary[company].Shares -= shares;//removes the number of shares from that companies in the dictionary
-            userPortfolio.AvailableFunds += Api.FetchData(company, "1. open") * shares;//add the value of the sold stocks to the users available funds
+            userPortfolio.AvailableFunds += Api.FetchData(company, "1. open", "Daily") * shares;//add the value of the sold stocks to the users available funds
         }
     }
 
@@ -69,7 +69,7 @@ namespace StockTrader_.NET_Framework_
             StockStorage[] shares = SharesDictionary.Values.ToArray();
             for (int i = 0; i < keys.Length;)
             {
-                totalAccountValue = Api.FetchData(keys[i], "1. open") * shares[i].Shares + totalAccountValue;
+                totalAccountValue = Api.FetchData(keys[i], "1. open", "Daily") * shares[i].Shares + totalAccountValue;
                 i++;
             }
             return totalAccountValue;

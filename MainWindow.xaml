@@ -81,5 +81,12 @@
         <Slider x:Name="nodatapointslider" Maximum="100" Minimum="1" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="2"/>
         <Label x:Name="extremeDataWarning" Content="Extreme data mode on" Visibility="Hidden" Grid.Column="9" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
         <Button Click="OpenSettings" Content="Settings" Grid.Column="10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"/>
+        <ComboBox x:Name="TimeframeComboBox" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200">
+            <ComboBoxItem x:Name="IntraDay" Content="IntraDay"/>
+            <ComboBoxItem x:Name="DailyBox" Content="Daily"/>
+            <ComboBoxItem x:Name="WeeklyBox" Content="Weekly"/>
+            <ComboBoxItem x:Name="MonthlyBox" IsSelected="True" Content="Monthly"/>
+        </ComboBox>
+        <Button Click="ChangeGraphResolution" Content="Apply" Grid.Column="9" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

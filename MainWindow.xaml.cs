@@ -30,13 +30,14 @@ namespace StockTrader_.NET_Framework_
 
         private void FindData(string code)
         {
-            CurrentCompany = code;
-            var values = Api.CollectData(code);
+            CurrentCompany = code; 
+            string timeframe = TimeframeComboBox.SelectionBoxItem.ToString();
+            var values = Api.CollectData(code,timeframe);
             currentCompany.Content = code;
-            currentPrice.Content = Api.FetchData(code,"1. open");
-            highLabel.Content = Api.FetchData(code, "2. high");
-            lowLabel.Content = Api.FetchData(code, "3. low");
-            volume.Content = Api.FetchData(code, "5. volume");
+            currentPrice.Content = Api.FetchData(code,"1. open", timeframe);
+            highLabel.Content = Api.FetchData(code, "2. high", timeframe);
+            lowLabel.Content = Api.FetchData(code, "3. low", timeframe);
+            volume.Content = Api.FetchData(code, "5. volume", timeframe);
             GraphHandler lineGraph = new GraphHandler(linegraph);
             lineGraph.Draw(values, Convert.ToInt32(nodatapointslider.Value));
         }
@@ -86,6 +87,11 @@ namespace StockTrader_.NET_Framework_
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Show();
             this.Close();
+        }
+
+        private void ChangeGraphResolution(object sender, RoutedEventArgs e)
+        {
+            FindData(CurrentCompany);
         }
     }
 }
