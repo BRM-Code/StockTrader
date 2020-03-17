@@ -1,6 +1,6 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
 using System.Windows;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
@@ -12,10 +12,10 @@ namespace StockTrader_.NET_Framework_
         private MySqlDataReader _dataReader;
         private Portfolio _portfolio;
 
-        public Portfolio RetrievePortfolio()//Connects to the Database and gets the entry with the highest Id which is the latest
+        public Portfolio RetrievePortfolio(Startup startup)//Connects to the Database and gets the entry with the highest Id which is the latest
         {
-            MessageBox.Show("Connecting to Database...", "Waiting");
-            
+            System.Threading.Thread.Sleep(500);
+            startup.ConnLabel.Visibility = Visibility.Visible;
             _sqlConnection.Open();
             try
             {
@@ -26,7 +26,8 @@ namespace StockTrader_.NET_Framework_
             }
             catch
             {
-                MessageBox.Show("Database empty, creating new Portfolio", "");
+                startup.ConnVerfLabel.Content = "Database empty, creating new Portfolio";
+                startup.ConnVerfLabel.Visibility = Visibility.Visible;
                 _portfolio = new Portfolio();
             }
             _sqlConnection.Close();

@@ -27,20 +27,33 @@ namespace StockTrader_.NET_Framework_
 
         private void FindData(string code)
         {
-            if (Nodatapointslider.Value == 0)
-            {
-                return;
-            }
-            CurrentCompany = code; 
+            if (Nodatapointslider.Value == 0)return;
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
+            if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
+            {
+                ExtremeDataWarning.Content = $"Warning:\n ExtremeData Mode doesn't work with {timeFrame}";
+            }
+            else
+            {
+                if (ExtremeDataWarning.Content != "Extreme data mode enabled")
+                {
+                    ExtremeDataWarning.Content = "Extreme data mode enabled";
+                }
+            }
+            CurrentCompany = code;
             currentCompany.Content = code;
             currentPrice.Content = Api.FetchData(code,"1. open", timeFrame);
             highLabel.Content = Api.FetchData(code, "2. high", timeFrame);
             LowLabel.Content = Api.FetchData(code, "3. low", timeFrame);
             Volume.Content = Api.FetchData(code, "5. volume", timeFrame);
             GraphHandler lineGraph = new GraphHandler(linegraph);
+            int nodatapoints = Convert.ToInt32(Nodatapointslider.Value);
+            if (nodatapoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))
+            {
+                nodatapoints = 100;
+            }
             var values = Api.CollectData(code, timeFrame);
-            lineGraph.Draw(values, Convert.ToInt32(Nodatapointslider.Value));
+            lineGraph.Draw(values,nodatapoints);
             DisplayGraph.BottomTitle = timeFrame;
         }
 
@@ -99,11 +112,7 @@ namespace StockTrader_.NET_Framework_
 
         private void TimeframeComboBox_OnDropDownClosed(object sender, EventArgs e)
         {
-            if (CurrentCompany == "")
-            {
-                MessageBox.Show("No Company Selected!", "Error");
-                return;
-            }
+            if (CurrentCompany == "")return;
             FindData(CurrentCompany);
         }
 

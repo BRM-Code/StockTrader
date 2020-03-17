@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -14,9 +14,9 @@ namespace StockTrader_.NET_Framework_
         {
             _currentStartup = currentStartup;
             InitializeComponent();
-            ServerAddressEntry.Text = Startup.Settings.SQLServer;
-            DatabaseEntry.Text = Startup.Settings.SQLDatabase;
-            Username.Text = Startup.Settings.SQLUser;
+            currentServer.Content = Startup.Settings.SQLServer;
+            currentDatabase.Content = Startup.Settings.SQLDatabase;
+            currentUser.Content = Startup.Settings.SQLUser;
         }
 
         private void ApplyButton(object sender, RoutedEventArgs e)
@@ -27,6 +27,7 @@ namespace StockTrader_.NET_Framework_
             if (Username.Text != "") Startup.Settings.SQLUser = Username.Text;
             Startup.Settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
+            this.Close();
         }
 
         private void OnClosing(object sender, EventArgs e)

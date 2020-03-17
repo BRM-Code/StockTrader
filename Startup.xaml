@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
         mc:Ignorable="d"
-        Title="Startup" Height="100" Width="100">
+        Title="Startup" Height="300" Width="500">
     <Grid>
-        <Label Content="Starting" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Startup:" Grid.ColumnSpan="2" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label x:Name="ConnLabel" Content="Connecting to Database" Visibility="Hidden" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label x:Name="ConnVerfLabel" Content="Connected" Visibility="Hidden" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="2" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label x:Name="StartLabel" Content="Starting Program" Visibility="Hidden" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="3" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>
