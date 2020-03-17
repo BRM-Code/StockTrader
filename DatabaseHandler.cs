@@ -15,6 +15,7 @@ namespace StockTrader_.NET_Framework_
         public Portfolio RetrievePortfolio()//Connects to the Database and gets the entry with the highest Id which is the latest
         {
             MessageBox.Show("Connecting to Database...", "Waiting");
+            
             _sqlConnection.Open();
             try
             {

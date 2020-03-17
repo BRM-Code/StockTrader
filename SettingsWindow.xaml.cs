@@ -8,9 +8,11 @@ namespace StockTrader_.NET_Framework_
     public partial class SettingsWindow
     {
         private bool _isInvalidAddress;
+        private readonly Startup _currentStartup;
 
-        public SettingsWindow()
+        public SettingsWindow(Startup currentStartup)
         {
+            _currentStartup = currentStartup;
             InitializeComponent();
             ServerAddressEntry.Text = Startup.Settings.SQLServer;
             DatabaseEntry.Text = Startup.Settings.SQLDatabase;
@@ -36,23 +38,23 @@ namespace StockTrader_.NET_Framework_
 
         private void OnClosing(object sender, EventArgs e)
         {
-            MainWindow mainWindow = new MainWindow(Startup.UserPortfolio);
+            MainWindow mainWindow = new MainWindow(Startup.UserPortfolio, _currentStartup);
             mainWindow.Show();
         }
 
         private void ServerAddressEntry_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            Regex regex = new Regex(@"!|\s|_|#|%|&|^|£|$");
+            Regex regex = new Regex(@"[-a - zA - Z0 - 9@:% _\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?");
             bool isMatch = regex.IsMatch(ServerAddressEntry.Text);
             if(isMatch)
             {
-                Invalidlabel.Visibility = Visibility.Visible;
-                _isInvalidAddress = true;
+                Invalidlabel.Visibility = Visibility.Hidden;
+                _isInvalidAddress = false;
             }
             else
             {
-                Invalidlabel.Visibility = Visibility.Hidden;
-                _isInvalidAddress = false;
+                Invalidlabel.Visibility = Visibility.Visible;
+                _isInvalidAddress = true;
             }
         }
     }
