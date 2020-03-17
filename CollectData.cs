@@ -21,11 +21,10 @@ namespace StockTrader_.NET_Framework_
 
         public static JToken CollectData(string company,string timeFrame)
         {
-            Uri url = Api.CreateUrl(company,timeFrame);
-            JToken valuesJToken = Api.GetResponse(url,timeFrame);
+            Uri url = CreateUrl(company,timeFrame);
+            JToken valuesJToken = GetResponse(url,timeFrame);
             if (valuesJToken == null)
             {
-                Console.WriteLine(@"Switching Proxy");
                 ProxykeyCooldown(_activePairs[0]);
                 _activePairs.Remove(_activePairs[0]);
                 Api.CollectData(company,timeFrame);
@@ -57,8 +56,7 @@ namespace StockTrader_.NET_Framework_
             myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
             wb.Proxy = myProxy;
             string apIresponse;
-            try
-            { apIresponse = wb.DownloadString(uri); }
+            try {apIresponse = wb.DownloadString(uri);}
             catch
             {
                 MessageBox.Show("No response from API, check connection", "Error");
@@ -85,7 +83,7 @@ namespace StockTrader_.NET_Framework_
                     jObjectName = "Monthly Time Series";
                     break;
             }
-            var values = responseJObject[jObjectName];
+            JToken values = responseJObject[jObjectName];
             return values;
         }
         
@@ -137,6 +135,7 @@ namespace StockTrader_.NET_Framework_
         private static EventHandler Refresh(int removedPair)
         {
             _cooldownTimer.Stop();
+            _cooldownTimer.Dispose();
             _activePairs.Add(removedPair);
             return null;
         }

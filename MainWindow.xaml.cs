@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Button = System.Windows.Controls.Button;
@@ -42,17 +44,22 @@ namespace StockTrader_.NET_Framework_
             }
             CurrentCompany = code;
             currentCompany.Content = code;
-            currentPrice.Content = Api.FetchData(code,"1. open", timeFrame);
-            highLabel.Content = Api.FetchData(code, "2. high", timeFrame);
-            LowLabel.Content = Api.FetchData(code, "3. low", timeFrame);
-            Volume.Content = Api.FetchData(code, "5. volume", timeFrame);
+            var values = Api.CollectData(code, timeFrame);
+            currentPrice.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            highLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["2. high"]);
+            LowLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["3. low"]);
+            Volume.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["5. volume"]);
+            var keysArray = values.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            if (keysArray.Length != Nodatapointslider.Value)
+            {
+                Nodatapointslider.Value = keysArray.Length;
+            }
             GraphHandler lineGraph = new GraphHandler(linegraph);
             int nodatapoints = Convert.ToInt32(Nodatapointslider.Value);
             if (nodatapoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))
             {
                 nodatapoints = 100;
             }
-            var values = Api.CollectData(code, timeFrame);
             lineGraph.Draw(values,nodatapoints);
             DisplayGraph.BottomTitle = timeFrame;
         }

@@ -23,9 +23,12 @@ namespace StockTrader_.NET_Framework_
             }
 
             float[] y = new float[nodatapoints];
-            for (int i = 0; i < nodatapoints; i++)
+            var keysArray = datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (int i = 0; i < nodatapoints - 1;)
             {
-                y[i] = Convert.ToSingle(datapoints[datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray()[nodatapoints - i - 1]]["1. open"]);
+                i++;
+                var a = keysArray[nodatapoints - i - 1];
+                y[i] = Convert.ToSingle(datapoints[a]["1. open"]);
             }
 
             List<int> x = new List<int>();
