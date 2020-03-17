@@ -30,6 +30,7 @@ namespace StockTrader_.NET_Framework_
                 _portfolio = new Portfolio();
             }
             _sqlConnection.Close();
+            _sqlConnection.Dispose();
             return _portfolio;
         }
 
@@ -42,6 +43,7 @@ namespace StockTrader_.NET_Framework_
             _sqlConnection.Open();
             command.ExecuteNonQuery();
             _sqlConnection.Close();
+            _sqlConnection.Dispose();
         }
     }
 }

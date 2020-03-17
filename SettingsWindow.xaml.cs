@@ -21,18 +21,11 @@ namespace StockTrader_.NET_Framework_
 
         private void ApplyButton(object sender, RoutedEventArgs e)
         {
-            if (_isInvalidAddress)
-            {
-                return;
-            }
-            if (Password.Password != "")
-            {
-                Startup.Settings.SQLPassword = Password.Password;
-            }
-            Startup.Settings.SQLServer = ServerAddressEntry.Text;
-            Startup.Settings.SQLDatabase = DatabaseEntry.Text;
-            Startup.Settings.SQLUser = Username.Text;
-            Startup.Settings.ExtremeData = (bool) ExtremeDataCheckBox.IsChecked;
+            if (Password.Password != "") Startup.Settings.SQLPassword = Password.Password;
+            if (ServerAddressEntry.Text != "" && _isInvalidAddress == false) Startup.Settings.SQLServer = ServerAddressEntry.Text; 
+            if (DatabaseEntry.Text != "") Startup.Settings.SQLDatabase = DatabaseEntry.Text; 
+            if (Username.Text != "") Startup.Settings.SQLUser = Username.Text;
+            Startup.Settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
         }
 
@@ -44,9 +37,10 @@ namespace StockTrader_.NET_Framework_
 
         private void ServerAddressEntry_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (ServerAddressEntry.Text == "")return;
             Regex regex = new Regex(@"[-a - zA - Z0 - 9@:% _\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?");
             bool isMatch = regex.IsMatch(ServerAddressEntry.Text);
-            if(isMatch)
+            if (isMatch)
             {
                 Invalidlabel.Visibility = Visibility.Hidden;
                 _isInvalidAddress = false;

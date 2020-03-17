@@ -11,7 +11,7 @@ namespace StockTrader_.NET_Framework_
         public static string CurrentCompany = "";
         public static Portfolio UserPortfolio;
         private Timer _updateTimer;
-        private Startup _currentStartup;
+        private readonly Startup _currentStartup;
 
         public MainWindow(Portfolio userPortfolio, Startup currentStartup)
         {
@@ -25,11 +25,6 @@ namespace StockTrader_.NET_Framework_
             Nodatapointslider.TickFrequency = 100;
         }
 
-        private void ButtonHandler(object sender, RoutedEventArgs e)
-        {
-            FindData((string)((Button)sender).Tag);
-        }
-
         private void FindData(string code)
         {
             if (Nodatapointslider.Value == 0)
@@ -37,28 +32,19 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
             CurrentCompany = code; 
-            string timeframe = TimeframeComboBox.SelectionBoxItem.ToString();
-            var values = Api.CollectData(code,timeframe);
+            var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
             currentCompany.Content = code;
-            currentPrice.Content = Api.FetchData(code,"1. open", timeframe);
-            highLabel.Content = Api.FetchData(code, "2. high", timeframe);
-            LowLabel.Content = Api.FetchData(code, "3. low", timeframe);
-            Volume.Content = Api.FetchData(code, "5. volume", timeframe);
+            currentPrice.Content = Api.FetchData(code,"1. open", timeFrame);
+            highLabel.Content = Api.FetchData(code, "2. high", timeFrame);
+            LowLabel.Content = Api.FetchData(code, "3. low", timeFrame);
+            Volume.Content = Api.FetchData(code, "5. volume", timeFrame);
             GraphHandler lineGraph = new GraphHandler(linegraph);
+            var values = Api.CollectData(code, timeFrame);
             lineGraph.Draw(values, Convert.ToInt32(Nodatapointslider.Value));
+            DisplayGraph.BottomTitle = timeFrame;
         }
 
-        private void BuyButton(object sender, RoutedEventArgs e)
-        {
-            TraderButtonHandler(true);
-        }
-
-        private void SellButton(object sender, RoutedEventArgs e)
-        {
-            TraderButtonHandler(false);
-        }
-
-        private void TraderButtonHandler(bool isBuyBox)
+        private static void TraderButtonHandler(bool isBuyBox)
         {
             if (CurrentCompany == "")
             {
@@ -77,6 +63,21 @@ namespace StockTrader_.NET_Framework_
             _updateTimer.Start();
         }
 
+        private void BuyButton(object sender, RoutedEventArgs e)
+        {
+            TraderButtonHandler(true);
+        }
+
+        private void SellButton(object sender, RoutedEventArgs e)
+        {
+            TraderButtonHandler(false);
+        }
+
+        private void ButtonHandler(object sender, RoutedEventArgs e)
+        {
+            FindData((string)((Button)sender).Tag);
+        }
+
         private void ValueUpdater(object sender, EventArgs e)
         {
             avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
@@ -86,6 +87,7 @@ namespace StockTrader_.NET_Framework_
         private void OnClosing(object sender, EventArgs e)
         {
             Startup.UserPortfolio = UserPortfolio;
+            _updateTimer.Dispose();
         }
 
         private void OpenSettings(object sender, RoutedEventArgs e)
@@ -108,6 +110,12 @@ namespace StockTrader_.NET_Framework_
         private void Close(object sender, RoutedEventArgs e)
         {
             _currentStartup.Shutdown(UserPortfolio,this);
+        }
+
+        private void Save(object sender, RoutedEventArgs e)
+        {
+            DatabaseHandler database = new DatabaseHandler();
+            database.SavePortfolio(UserPortfolio);
         }
     }
 }
