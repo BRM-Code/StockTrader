@@ -21,6 +21,8 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
+            avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
+            accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
             if (!Startup.Settings.ExtremeData) return;
             ExtremeDataWarning.Visibility = Visibility.Visible;
             Nodatapointslider.Maximum = 1160;
