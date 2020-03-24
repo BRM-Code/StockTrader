@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using InteractiveDataDisplay.WPF;
 using Newtonsoft.Json.Linq;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
@@ -15,6 +16,8 @@ namespace StockTrader_.NET_Framework_
         public static JToken CurrentCompanyJToken;
         public static Portfolio UserPortfolio;
         public static float CurrentCompanyPrice;
+        public LineGraph LineGraph;
+
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
 
@@ -24,15 +27,15 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
-            avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
-            accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
+            AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
+            AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
             if (!Startup.Settings.ExtremeData) return;
             ExtremeDataWarning.Visibility = Visibility.Visible;
             Nodatapointslider.Maximum = 1160;
             Nodatapointslider.TickFrequency = 100;
         }
 
-        private void FindData(string code)
+        private async void FindData(string code)
         {
             if (Convert.ToInt32(Nodatapointslider.Value) == 0)return;
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
@@ -52,21 +55,18 @@ namespace StockTrader_.NET_Framework_
             CurrentCompanyJToken = Api.CollectData(code, timeFrame);
             var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
             CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
-            currentPrice.Content = CurrentCompanyPrice;
-            highLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
+            CurrentPrice.Content = CurrentCompanyPrice;
+            HighLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
             LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
             Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
             if (Convert.ToInt32(keysArray.Length) != Convert.ToInt32(Nodatapointslider.Value))
             {
                 Nodatapointslider.Value = keysArray.Length;
             }
-            var lineGraph = new GraphHandler(linegraph);
+            var lineGraph = new GraphHandler(Linegraph);
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
-            if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))
-            {
-                noDataPoints = 100;
-            }
-            lineGraph.Draw(CurrentCompanyJToken, noDataPoints);
+            if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))noDataPoints = 100;
+            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints);
             DisplayGraph.BottomTitle = timeFrame;
         }
 
@@ -106,8 +106,8 @@ namespace StockTrader_.NET_Framework_
 
         private void ValueUpdater(object sender, EventArgs e)
         {
-            avalibleFunds.Content = $"£{UserPortfolio.AvailableFunds}";
-            accountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
+            AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
+            AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
         }
 
         private void OnClosing(object sender, EventArgs e)

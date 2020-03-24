@@ -32,13 +32,6 @@ namespace StockTrader_.NET_Framework_
             return valuesJToken;
         }
 
-        public static float FetchData(string company,string value,string timeFrame)
-        {
-            JToken data = CollectData(company,timeFrame);
-            var dataitem = Convert.ToSingle(data[data.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]][value]);
-            return dataitem;
-        }
-
         private static JToken GetResponse(Uri uri,string timeFrame)
         {
             WebProxy myProxy = new WebProxy();
@@ -67,22 +60,15 @@ namespace StockTrader_.NET_Framework_
             {
                 return null;
             }
-            string jObjectName = "";
-            switch (timeFrame)
+
+            var jObjectName = timeFrame switch
             {
-                case "IntraDay":
-                    jObjectName = "Time Series (5min)";
-                    break;
-                case "Daliy":
-                    jObjectName = "Time Series (Daily)";
-                    break;
-                case "Weekly":
-                    jObjectName = "Weekly Time Series";
-                    break;
-                case "Monthly":
-                    jObjectName = "Monthly Time Series";
-                    break;
-            }
+                "IntraDay" => "Time Series (5min)",
+                "Daliy" => "Time Series (Daily)",
+                "Weekly" => "Weekly Time Series",
+                "Monthly" => "Monthly Time Series",
+                _ => "Error"
+            };
             JToken values = responseJObject[jObjectName];
             return values;
         }

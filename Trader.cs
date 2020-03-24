@@ -67,7 +67,7 @@ namespace StockTrader_.NET_Framework_
             float totalAccountValue = 0;
             string[] keys = SharesDictionary.Keys.ToArray();
             StockStorage[] shares = SharesDictionary.Values.ToArray();
-            for (int i = 0; i < keys.Length;)
+            for (var i = 0; i < keys.Length;)
             {
                 totalAccountValue = MainWindow.CurrentCompanyPrice * shares[i].Shares + totalAccountValue;
                 i++;
