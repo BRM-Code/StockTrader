@@ -4,36 +4,36 @@ using System.Windows;
 
 namespace StockTrader_.NET_Framework_
 {
-    class Trader
+    public static class Trader
     {
-        public void Buy(string company, int shares,Portfolio userPortfolio)
+        public static void Buy(string company, int shares)
         {
-            if (userPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
+            if (MainWindow.UserPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
             {
-                userPortfolio.SharesDictionary[company].Shares += shares;
-                userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open","Daily") * shares;
+                MainWindow.UserPortfolio.SharesDictionary[company].Shares += shares;
+                MainWindow.UserPortfolio.AvailableFunds -= MainWindow.CurrentCompanyPrice * shares;
                 return;
             }
-            StockStorage buy = new StockStorage(company,shares, Api.FetchData(company, "1. open", "Daily"));
-            userPortfolio.AvailableFunds -= Api.FetchData(company, "1. open", "Daily") * shares;
-            userPortfolio.SharesDictionary.Add(company,buy);
+            var buy = new StockStorage(company,shares, MainWindow.CurrentCompanyPrice);
+            MainWindow.UserPortfolio.AvailableFunds -= MainWindow.CurrentCompanyPrice * shares;
+            MainWindow.UserPortfolio.SharesDictionary.Add(company,buy);
         }
 
-        public void Sell(string company, int shares, Portfolio userPortfolio)
+        public static void Sell(string company, int shares)
         {
-            if (!userPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
+            if (!MainWindow.UserPortfolio.SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
             {
                 MessageBox.Show("You don't own any stocks from that company", "Error");
                 return;
             }
 
-            if (userPortfolio.SharesDictionary[company].Shares < shares)//Checks that the user isn't trying to sell more stocks than they own
+            if (MainWindow.UserPortfolio.SharesDictionary[company].Shares < shares)//Checks that the user isn't trying to sell more stocks than they own
             {
                 MessageBox.Show("Trying to sell more shares than in your possession", "Error");
                 return;
             }
-            userPortfolio.SharesDictionary[company].Shares -= shares;//removes the number of shares from that companies in the dictionary
-            userPortfolio.AvailableFunds += Api.FetchData(company, "1. open", "Daily") * shares;//add the value of the sold stocks to the users available funds
+            MainWindow.UserPortfolio.SharesDictionary[company].Shares -= shares;//removes the number of shares from that companies in the dictionary
+            MainWindow.UserPortfolio.AvailableFunds += MainWindow.CurrentCompanyPrice * shares;//add the value of the sold stocks to the users available funds
         }
     }
 
@@ -69,7 +69,7 @@ namespace StockTrader_.NET_Framework_
             StockStorage[] shares = SharesDictionary.Values.ToArray();
             for (int i = 0; i < keys.Length;)
             {
-                totalAccountValue = Api.FetchData(keys[i], "1. open", "Daily") * shares[i].Shares + totalAccountValue;
+                totalAccountValue = MainWindow.CurrentCompanyPrice * shares[i].Shares + totalAccountValue;
                 i++;
             }
             return totalAccountValue;

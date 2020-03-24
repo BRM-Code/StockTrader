@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace StockTrader_.NET_Framework_
@@ -11,32 +13,28 @@ namespace StockTrader_.NET_Framework_
         {
             _isBuyBox = isBuyBox;
             InitializeComponent();
-            switch (_isBuyBox)
+            Title.Content = _isBuyBox switch
             {
-                case true:
-                    Title.Content = "Buy";
-                    break;
-                case false:
-                    Title.Content = "Sell";
-                    break;
-            }
-            current.Content = Api.FetchData(MainWindow.CurrentCompany, "1. open","Daily");
+                true => "Buy",
+                false => "Sell"
+            };
+            var currentCompanyJToken = MainWindow.CurrentCompanyJToken;
+            current.Content = Convert.ToSingle(currentCompanyJToken[currentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
 
         private void Submit(object sender, RoutedEventArgs e)
         {
-            int noshares = Convert.ToInt32((SharesAmount.Text));
-            Trader newTrader = new Trader();
+            var noShares = Convert.ToInt32((SharesAmount.Text));
             switch (_isBuyBox)
             {
                 case true:
-                    newTrader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+                    Trader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noShares));
                     break;
                 case false:
-                    newTrader.Sell(MainWindow.CurrentCompany, Convert.ToInt32(noshares), MainWindow.UserPortfolio);
+                    Trader.Sell(MainWindow.CurrentCompany, Convert.ToInt32(noShares));
                     break;
             }
-            this.Close();
+            Close();
         }
     }
 }

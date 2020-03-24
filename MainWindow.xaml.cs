@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 
@@ -11,7 +12,9 @@ namespace StockTrader_.NET_Framework_
     public partial class MainWindow
     {
         public static string CurrentCompany = "";
+        public static JToken CurrentCompanyJToken;
         public static Portfolio UserPortfolio;
+        public static float CurrentCompanyPrice;
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
 
@@ -31,7 +34,7 @@ namespace StockTrader_.NET_Framework_
 
         private void FindData(string code)
         {
-            if (Nodatapointslider.Value == 0)return;
+            if (Convert.ToInt32(Nodatapointslider.Value) == 0)return;
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
             {
@@ -39,30 +42,31 @@ namespace StockTrader_.NET_Framework_
             }
             else
             {
-                if (ExtremeDataWarning.Content != "Extreme data mode enabled")
+                if ((string) ExtremeDataWarning.Content != "Extreme data mode enabled")
                 {
                     ExtremeDataWarning.Content = "Extreme data mode enabled";
                 }
             }
             CurrentCompany = code;
             currentCompany.Content = code;
-            var values = Api.CollectData(code, timeFrame);
-            currentPrice.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
-            highLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["2. high"]);
-            LowLabel.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["3. low"]);
-            Volume.Content = Convert.ToSingle(values[values.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["5. volume"]);
-            var keysArray = values.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            if (keysArray.Length != Nodatapointslider.Value)
+            CurrentCompanyJToken = Api.CollectData(code, timeFrame);
+            var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
+            currentPrice.Content = CurrentCompanyPrice;
+            highLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
+            LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
+            Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
+            if (Convert.ToInt32(keysArray.Length) != Convert.ToInt32(Nodatapointslider.Value))
             {
                 Nodatapointslider.Value = keysArray.Length;
             }
-            GraphHandler lineGraph = new GraphHandler(linegraph);
-            int nodatapoints = Convert.ToInt32(Nodatapointslider.Value);
-            if (nodatapoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))
+            var lineGraph = new GraphHandler(linegraph);
+            var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
+            if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))
             {
-                nodatapoints = 100;
+                noDataPoints = 100;
             }
-            lineGraph.Draw(values,nodatapoints);
+            lineGraph.Draw(CurrentCompanyJToken, noDataPoints);
             DisplayGraph.BottomTitle = timeFrame;
         }
 
@@ -132,7 +136,7 @@ namespace StockTrader_.NET_Framework_
 
         private void Save(object sender, RoutedEventArgs e)
         {
-            DatabaseHandler database = new DatabaseHandler();
+            var database = new DatabaseHandler();
             database.SavePortfolio(UserPortfolio);
         }
     }
