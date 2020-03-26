@@ -8,7 +8,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
 {
-    static class Api
+    internal static class Api
     {
         private static readonly Dictionary<string, string> ProxyKeyPairDictionary = new Dictionary<string, string>
         {
@@ -21,20 +21,20 @@ namespace StockTrader_.NET_Framework_
 
         public static JToken CollectData(string company,string timeFrame)
         {
-            Uri url = CreateUrl(company,timeFrame);
-            JToken valuesJToken = GetResponse(url,timeFrame);
+            var url = CreateUrl(company,timeFrame);
+            var valuesJToken = GetResponse(url,timeFrame);
             if (valuesJToken == null)
             {
                 ProxykeyCooldown(_activePairs[0]);
                 _activePairs.Remove(_activePairs[0]);
-                Api.CollectData(company,timeFrame);
+                CollectData(company,timeFrame);
             }
             return valuesJToken;
         }
 
         private static JToken GetResponse(Uri uri,string timeFrame)
         {
-            WebProxy myProxy = new WebProxy();
+            var myProxy = new WebProxy();
             Uri newUri = null;
             try
             {
@@ -55,7 +55,7 @@ namespace StockTrader_.NET_Framework_
                 MessageBox.Show("No response from API, check connection", "Error");
                 return null;
             }
-            JObject responseJObject = JObject.Parse(apIresponse);
+            var responseJObject = JObject.Parse(apIresponse);
             if (responseJObject.ContainsKey("Note"))
             {
                 return null;
@@ -69,45 +69,43 @@ namespace StockTrader_.NET_Framework_
                 "Monthly" => "Monthly Time Series",
                 _ => "Error"
             };
-            JToken values = responseJObject[jObjectName];
+            var values = responseJObject[jObjectName];
             return values;
         }
         
         private static Uri CreateUrl(string company,string timeFrame)
         {
             using var wb = new WebClient();
-            UriBuilder uribuild = new UriBuilder();//Setting up the UriBuilder
-            uribuild.Host = "www.alphavantage.co/query";
-            string extraDataParameter = "";
-            string apiFunction = "";
+            var build = new UriBuilder {Host = "www.alphavantage.co/query"}; //Setting up the UriBuilder
+            var extraDataParameter = "";
             switch(timeFrame)
             {
                 case "IntraDay":
-                    apiFunction = "TIME_SERIES_INTRADAY";
+                    timeFrame = "TIME_SERIES_INTRADAY";
                     break;
                 case "Daliy":
-                    apiFunction = "TIME_SERIES_DAILY";
+                    timeFrame = "TIME_SERIES_DAILY";
                     break;
                 case "Weekly":
-                    apiFunction = "TIME_SERIES_WEEKLY";
+                    timeFrame = "TIME_SERIES_WEEKLY";
                     break;
                 case "Monthly":
-                    apiFunction = "TIME_SERIES_MONTHLY";
+                    timeFrame = "TIME_SERIES_MONTHLY";
                     break;
             }
             if (Startup.Settings.ExtremeData)
             {
                 extraDataParameter = "&outputsize=full";
             }
-            try { uribuild.Query = $"function={apiFunction}&symbol={company}&interval=5min{extraDataParameter}&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_activePairs[0]]}"; }
+            try { build.Query = $"function={timeFrame}&symbol={company}&interval=5min{extraDataParameter}&apikey={ProxyKeyPairDictionary.Keys.ToArray()[_activePairs[0]]}"; }
             catch
             {
                 MessageBox.Show("Ran out of API keys that work", "Error");
                 return null;
             }
-            Uri apIuri = uribuild.Uri;//Tells UriBuilder that all the URL parts are there
-            Console.WriteLine(apIuri);
-            return apIuri;
+            var uri = build.Uri;//Tells UriBuilder that all the URL parts are there
+            Console.WriteLine(uri);
+            return uri;
         }
         
         private static void ProxykeyCooldown(int removedPair)

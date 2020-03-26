@@ -39,8 +39,8 @@ namespace StockTrader_.NET_Framework_
         private void ServerAddressEntry_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (ServerAddressEntry.Text == "")return;
-            Regex regex = new Regex(@"[-a - zA - Z0 - 9@:% _\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?");
-            bool isMatch = regex.IsMatch(ServerAddressEntry.Text);
+            var regex = new Regex(@"[-a - zA - Z0 - 9@:% _\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?");
+            var isMatch = regex.IsMatch(ServerAddressEntry.Text);
             if (isMatch)
             {
                 Invalidlabel.Visibility = Visibility.Hidden;

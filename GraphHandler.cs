@@ -11,28 +11,35 @@ namespace StockTrader_.NET_Framework_
     {
         private readonly LineGraph _lineGraph;
 
-        public GraphHandler(LineGraph linegraph)
+        public GraphHandler(LineGraph lineGraph)
         {
-            _lineGraph = linegraph;
+            _lineGraph = lineGraph;
         }
 
-        public async Task Draw(JToken datapoints, int nodatapoints)
+        public async Task Draw(JToken data, int noDataPoints)
         {
-            if (datapoints == null || nodatapoints == 0)return;
-            var y = await DrawY(datapoints, nodatapoints);
-            var x = await DrawX(nodatapoints);
+            if (data == null || noDataPoints == 0)return;
+            var y = await DrawY(data, noDataPoints);
+            var x = await DrawX(noDataPoints);
             _lineGraph.Plot(x, y);
         }
 
-        private static async Task<float[]> DrawY(JToken datapoints, int nodatapoints)
+        public async Task QuickDraw(Dictionary<int,float> dataPointDictionary)
         {
-            float[] y = new float[nodatapoints];
-            var keysArray = datapoints.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            for (int i = 0; i < nodatapoints - 1;)
+            var x = dataPointDictionary.Keys.ToArray();
+            var y = dataPointDictionary.Values.ToArray();
+
+        }
+
+        private static async Task<float[]> DrawY(JToken data, int noDataPoints)
+        {
+            var y = new float[noDataPoints];
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (int i = 0; i < noDataPoints - 1;)
             {
                 i++;
-                var a = keysArray[nodatapoints - i - 1];
-                y[i] = Convert.ToSingle(datapoints[a]["1. open"]);
+                var a = keysArray[noDataPoints - i - 1];
+                y[i] = Convert.ToSingle(data[a]["1. open"]);
             }
             return y;
         }

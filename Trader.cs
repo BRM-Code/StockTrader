@@ -45,8 +45,8 @@ namespace StockTrader_.NET_Framework_
 
         public StockStorage(string company, int shares, float price)
         {
-            this.Company = company;
-            this.Shares = shares;
+            Company = company;
+            Shares = shares;
             PriceBought = price;
         }
     }

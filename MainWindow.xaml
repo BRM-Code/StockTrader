@@ -51,7 +51,8 @@
         <Label Grid.Column="10" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" x:Name="Volume" Content="0"/>
 
         <wpf:Chart x:Name="DisplayGraph" BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
-            <wpf:LineGraph x:Name="Linegraph" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
+            <wpf:LineGraph x:Name="Values" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
+            <wpf:LineGraph x:Name="Prediction" Description="Prediction" Stroke="Orange" StrokeThickness="3"/>
         </wpf:Chart>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
@@ -75,7 +76,7 @@
         <TextBox Grid.Column="8" HorizontalAlignment="Left" Text="{Binding ElementName=Nodatapointslider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Height="20" Width="30" Margin="-40"/>
         <Slider x:Name="Nodatapointslider" HorizontalAlignment="Center" Width="300" Maximum="100" Minimum="0" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="3"/>
         <Label x:Name="ExtremeDataWarning" Content="Extreme data mode enabled" Visibility="Hidden" Grid.Column="9" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-        <ComboBox DropDownClosed="TimeframeComboBox_OnDropDownClosed" x:Name="TimeframeComboBox" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
+        <ComboBox x:Name="TimeframeComboBox" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
             <ComboBoxItem Content="IntraDay"/>
             <ComboBoxItem Content="Daily"/>
             <ComboBoxItem Content="Weekly"/>

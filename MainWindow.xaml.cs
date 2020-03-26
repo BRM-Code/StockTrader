@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using InteractiveDataDisplay.WPF;
 using Newtonsoft.Json.Linq;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
@@ -16,7 +15,6 @@ namespace StockTrader_.NET_Framework_
         public static JToken CurrentCompanyJToken;
         public static Portfolio UserPortfolio;
         public static float CurrentCompanyPrice;
-        public LineGraph LineGraph;
 
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
@@ -50,6 +48,7 @@ namespace StockTrader_.NET_Framework_
                     ExtremeDataWarning.Content = "Extreme data mode enabled";
                 }
             }
+            DisplayGraph.BottomTitle = timeFrame;
             CurrentCompany = code;
             currentCompany.Content = code;
             CurrentCompanyJToken = Api.CollectData(code, timeFrame);
@@ -63,11 +62,13 @@ namespace StockTrader_.NET_Framework_
             {
                 Nodatapointslider.Value = keysArray.Length;
             }
-            var lineGraph = new GraphHandler(Linegraph);
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
             if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))noDataPoints = 100;
+            var lineGraph = new GraphHandler(Values);
             await lineGraph.Draw(CurrentCompanyJToken, noDataPoints);
-            DisplayGraph.BottomTitle = timeFrame;
+            var predictiongraph = new GraphHandler(Prediction);
+            var predictedvalues = await Predictor.LinearExtrapolation(CurrentCompanyJToken, noDataPoints);
+            await predictiongraph.QuickDraw(predictedvalues);
         }
 
         private static void TraderButtonHandler(bool isBuyBox)
@@ -77,7 +78,7 @@ namespace StockTrader_.NET_Framework_
                 MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
-            BuyBox newBuyBox = new BuyBox(isBuyBox);
+            var newBuyBox = new BuyBox(isBuyBox);
             newBuyBox.Show();
         }
 
@@ -118,7 +119,7 @@ namespace StockTrader_.NET_Framework_
 
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(_currentStartup);
+            var settingsWindow = new SettingsWindow(_currentStartup);
             settingsWindow.Show();
             this.Close();
         }
