@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using InteractiveDataDisplay.WPF;
 using Newtonsoft.Json.Linq;
 
@@ -9,25 +10,29 @@ namespace StockTrader_.NET_Framework_
 {
     internal class GraphHandler
     {
-        private readonly LineGraph _lineGraph;
-
-        public GraphHandler(LineGraph lineGraph)
-        {
-            _lineGraph = lineGraph;
-        }
-
-        public async Task Draw(JToken data, int noDataPoints)
+        public async Task Draw(JToken data, int noDataPoints, MainWindow mainWindow)
         {
             if (data == null || noDataPoints == 0)return;
             var y = await DrawY(data, noDataPoints);
             var x = await DrawX(noDataPoints);
-            _lineGraph.Plot(x, y);
+
+            var lg = new LineGraph();
+            mainWindow.lines.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.Blue);
+            lg.StrokeThickness = 2;
+            lg.Plot(x, y);
         }
 
-        public async Task QuickDraw(Dictionary<int,float> dataPointDictionary)
+        public async Task PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
         {
-            var x = dataPointDictionary.Keys.ToArray();
-            var y = dataPointDictionary.Values.ToArray();
+            var predictedValues = await Predictor.LinearExtrapolation(data, noDataPoints);
+            var x = predictedValues.Keys.ToArray();
+            var y = predictedValues.Values.ToArray();
+            var lg = new LineGraph();
+            mainWindow.lines.Children.Add(lg);
+            lg.Stroke = new SolidColorBrush(Colors.Orange);
+            lg.StrokeThickness = 2;
+            lg.Plot(x, y);
 
         }
 

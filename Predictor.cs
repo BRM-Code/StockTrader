@@ -16,9 +16,9 @@ namespace StockTrader_.NET_Framework_
             var b = ab.Values.ToArray()[0];
             //Convert Equation to a Dictionary of values
             var dataPointDictionary = new Dictionary<int, float>();
-            for (var x = 1; x < noDataPoints - 1;)
+            for (var x = 0; x < noDataPoints - 1;)
             {
-                var y = a + b * x; //y = a + bx
+                var y = a + b*x; //y = a + bx
                 dataPointDictionary.Add(x,y);
                 x++;
             }
@@ -32,7 +32,7 @@ namespace StockTrader_.NET_Framework_
             var ex = await Predictor.ex(noDataPoints);
             var exSquared = await Predictor.exSquared(noDataPoints);
             var exy = await Predictor.exy(data, noDataPoints);
-            var a = ((ey * exSquared) - (ex * exy)) / ((noDataPoints * exSquared) - (exSquared)*(exSquared));
+            var a = ((ey * exSquared) - (ex * exy)) / ((noDataPoints * exSquared) - (ex) *(ex));
             var b = (((noDataPoints*(exy)) - ((ex) * (ey))) / ((noDataPoints * exSquared) - ((ex) * (ex))));
             //y = a + bx
             var abFloats= new Dictionary<float, float>(){{a,b}};

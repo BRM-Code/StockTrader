@@ -50,9 +50,20 @@
         <Label Grid.Column="9" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Content="Volume:"/>
         <Label Grid.Column="10" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" x:Name="Volume" Content="0"/>
 
-        <wpf:Chart x:Name="DisplayGraph" BottomTitle="Time 5min Intervals" LeftTitle="Price (GBP)" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
-            <wpf:LineGraph x:Name="Values" Description="Stock Price" Stroke="Blue" StrokeThickness="3"/>
-            <wpf:LineGraph x:Name="Prediction" Description="Prediction" Stroke="Orange" StrokeThickness="3"/>
+        <wpf:Chart Name="plotter" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
+            <wpf:Chart.LegendContent>
+                <wpf:LegendItemsPanel>
+                    <wpf:LegendItemsPanel.Resources>
+                        <DataTemplate x:Key="InteractiveDataDisplay.WPF.LineGraph">
+                            <StackPanel Orientation="Horizontal">
+                                <Line Width="15" Height="15" X1="0" Y1="0" X2="15" Y2="15" Stroke="{Binding Path=Stroke}" StrokeThickness="2"/>
+                                <TextBlock Margin="5,0,0,0" Text="{Binding Path=Description}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </wpf:LegendItemsPanel.Resources>
+                </wpf:LegendItemsPanel>
+            </wpf:Chart.LegendContent>
+            <Grid Name="lines"/>
         </wpf:Chart>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">

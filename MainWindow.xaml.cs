@@ -48,7 +48,7 @@ namespace StockTrader_.NET_Framework_
                     ExtremeDataWarning.Content = "Extreme data mode enabled";
                 }
             }
-            DisplayGraph.BottomTitle = timeFrame;
+            plotter.BottomTitle = timeFrame;
             CurrentCompany = code;
             currentCompany.Content = code;
             CurrentCompanyJToken = Api.CollectData(code, timeFrame);
@@ -64,11 +64,10 @@ namespace StockTrader_.NET_Framework_
             }
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
             if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))noDataPoints = 100;
-            var lineGraph = new GraphHandler(Values);
-            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints);
-            var predictiongraph = new GraphHandler(Prediction);
-            var predictedvalues = await Predictor.LinearExtrapolation(CurrentCompanyJToken, noDataPoints);
-            await predictiongraph.QuickDraw(predictedvalues);
+            var lineGraph = new GraphHandler();
+            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints, this);
+            var predictionGraph = new GraphHandler();
+            await predictionGraph.PredictionDraw(CurrentCompanyJToken, noDataPoints,this);
         }
 
         private static void TraderButtonHandler(bool isBuyBox)
