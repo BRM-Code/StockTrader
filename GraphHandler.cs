@@ -40,11 +40,11 @@ namespace StockTrader_.NET_Framework_
         {
             var y = new float[noDataPoints];
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            for (int i = 0; i < noDataPoints - 1;)
+            for (int i = 0; i < noDataPoints;)
             {
-                i++;
                 var a = keysArray[noDataPoints - i - 1];
                 y[i] = Convert.ToSingle(data[a]["1. open"]);
+                i++;
             }
             return y;
         }
