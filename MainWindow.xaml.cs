@@ -15,6 +15,7 @@ namespace StockTrader_.NET_Framework_
         public static JToken CurrentCompanyJToken;
         public static Portfolio UserPortfolio;
         public static float CurrentCompanyPrice;
+        public string CurrentCompanyName = "";
 
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
@@ -50,7 +51,7 @@ namespace StockTrader_.NET_Framework_
             }
             plotter.BottomTitle = timeFrame;
             CurrentCompany = code;
-            currentCompany.Content = code;
+            currentCompany.Content = CurrentCompanyName;
             CurrentCompanyJToken = Api.CollectData(code, timeFrame);
             var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
             CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
@@ -58,12 +59,15 @@ namespace StockTrader_.NET_Framework_
             HighLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
             LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
             Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
-            if (Convert.ToInt32(keysArray.Length) != Convert.ToInt32(Nodatapointslider.Value))
+            if (Convert.ToInt32(keysArray.Length) <= Convert.ToInt32(Nodatapointslider.Value))
             {
                 Nodatapointslider.Value = keysArray.Length;
             }
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
-            if (noDataPoints >= 100 && (timeFrame == "Weekly" || timeFrame == "Monthly"))noDataPoints = 100;
+            if (noDataPoints >= 100 & (timeFrame == "Weekly" || timeFrame == "Monthly"))
+            {
+                 noDataPoints = 100;
+            }
             var lineGraph = new GraphHandler();
             await lineGraph.Draw(CurrentCompanyJToken, noDataPoints, this);
             var predictionGraph = new GraphHandler();
@@ -101,6 +105,7 @@ namespace StockTrader_.NET_Framework_
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
         {
+            CurrentCompanyName = ((Button)sender).Content.ToString();
             FindData((string)((Button)sender).Tag);
         }
 
@@ -139,5 +144,6 @@ namespace StockTrader_.NET_Framework_
             var database = new DatabaseHandler();
             database.SavePortfolio(UserPortfolio);
         }
+
     }
 }

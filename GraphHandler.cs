@@ -16,11 +16,12 @@ namespace StockTrader_.NET_Framework_
             var y = await DrawY(data, noDataPoints);
             var x = await DrawX(noDataPoints);
 
-            var lg = new LineGraph();
-            mainWindow.lines.Children.Add(lg);
-            lg.Stroke = new SolidColorBrush(Colors.Blue);
-            lg.StrokeThickness = 2;
-            lg.Plot(x, y);
+            var newline = new LineGraph();
+            mainWindow.lines.Children.Add(newline);
+            newline.Stroke = new SolidColorBrush(Colors.Blue);
+            newline.Description = $"{mainWindow.CurrentCompanyName}'s Price";
+            newline.StrokeThickness = 2;
+            newline.Plot(x, y);
         }
 
         public async Task PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
@@ -28,11 +29,12 @@ namespace StockTrader_.NET_Framework_
             var predictedValues = await Predictor.LinearExtrapolation(data, noDataPoints);
             var x = predictedValues.Keys.ToArray();
             var y = predictedValues.Values.ToArray();
-            var lg = new LineGraph();
-            mainWindow.lines.Children.Add(lg);
-            lg.Stroke = new SolidColorBrush(Colors.Orange);
-            lg.StrokeThickness = 2;
-            lg.Plot(x, y);
+            var newline = new LineGraph();
+            mainWindow.lines.Children.Add(newline);
+            newline.Stroke = new SolidColorBrush(Colors.Orange);
+            newline.Description = $"{mainWindow.CurrentCompanyName}'s Trend";
+            newline.StrokeThickness = 2;
+            newline.Plot(x, y);
 
         }
 
