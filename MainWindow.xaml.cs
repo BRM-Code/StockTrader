@@ -4,14 +4,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
-using Button = System.Windows.Controls.Button;
-using MessageBox = System.Windows.MessageBox;
 
 namespace StockTrader_.NET_Framework_
 {
     public partial class MainWindow
     {
-        public static string CurrentCompany = "";
+        public static string CurrentCompanyCode = "";
         public static JToken CurrentCompanyJToken;
         public static Portfolio UserPortfolio;
         public static float CurrentCompanyPrice;
@@ -34,8 +32,9 @@ namespace StockTrader_.NET_Framework_
             Nodatapointslider.TickFrequency = 100;
         }
 
-        private async void FindData(string code)
+        private async void FindData(string code,bool refresh)
         {
+            if (code == "") return;
             if (Convert.ToInt32(Nodatapointslider.Value) == 0)return;
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
@@ -49,10 +48,13 @@ namespace StockTrader_.NET_Framework_
                     ExtremeDataWarning.Content = "Extreme data mode enabled";
                 }
             }
+            if (CurrentCompanyCode != code || refresh)
+            {
+                CurrentCompanyJToken = Api.CollectData(code, timeFrame);
+            }
             plotter.BottomTitle = timeFrame;
-            CurrentCompany = code;
+            CurrentCompanyCode = CurrentCompanyName;
             currentCompany.Content = CurrentCompanyName;
-            CurrentCompanyJToken = Api.CollectData(code, timeFrame);
             var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
             CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
             CurrentPrice.Content = CurrentCompanyPrice;
@@ -76,9 +78,9 @@ namespace StockTrader_.NET_Framework_
 
         private static void TraderButtonHandler(bool isBuyBox)
         {
-            if (CurrentCompany == "")
+            if (CurrentCompanyCode == "")
             {
-                MessageBox.Show("No Company Selected!", "Error");
+                System.Windows.MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
             var newBuyBox = new BuyBox(isBuyBox);
@@ -105,8 +107,9 @@ namespace StockTrader_.NET_Framework_
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
         {
-            CurrentCompanyName = ((Button)sender).Content.ToString();
-            FindData((string)((Button)sender).Tag);
+            CurrentCompanyName = ((System.Windows.Controls.Button)sender).Content.ToString();
+            var code = (string) ((System.Windows.Controls.Button) sender).Tag; 
+            FindData(code,false);
         }
 
         private void ValueUpdater(object sender, EventArgs e)
@@ -125,13 +128,12 @@ namespace StockTrader_.NET_Framework_
         {
             var settingsWindow = new SettingsWindow(_currentStartup);
             settingsWindow.Show();
-            this.Close();
+            Close();
         }
 
         private void TimeframeComboBox_OnDropDownClosed(object sender, EventArgs e)
-        {
-            if (CurrentCompany == "")return;
-            FindData(CurrentCompany);
+        { 
+            FindData(CurrentCompanyCode, false);
         }
 
         private void Close(object sender, RoutedEventArgs e)
@@ -145,5 +147,14 @@ namespace StockTrader_.NET_Framework_
             database.SavePortfolio(UserPortfolio);
         }
 
+        private void AlgorithmChange(object sender, EventArgs e)
+        {
+            FindData(CurrentCompanyCode, true);
+        }
+
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            FindData(CurrentCompanyCode, true);
+        }
     }
 }

@@ -28,10 +28,10 @@ namespace StockTrader_.NET_Framework_
             switch (_isBuyBox)
             {
                 case true:
-                    Trader.Buy(MainWindow.CurrentCompany, Convert.ToInt32(noShares));
+                    Trader.Buy(MainWindow.CurrentCompanyCode, Convert.ToInt32(noShares));
                     break;
                 case false:
-                    Trader.Sell(MainWindow.CurrentCompany, Convert.ToInt32(noShares));
+                    Trader.Sell(MainWindow.CurrentCompanyCode, Convert.ToInt32(noShares));
                     break;
             }
             Close();

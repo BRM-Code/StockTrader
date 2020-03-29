@@ -8,6 +8,32 @@ namespace StockTrader_.NET_Framework_
 {
     static class Predictor
     {
+        public static async Task<float[]> SMA(JToken data, int noDataPoints)// for this one we only need to calculate y
+        {
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            var yValues = new float[noDataPoints];
+            for (var index1 = 0; index1 < noDataPoints;)
+            {
+                float c = 0;
+                float total = 0;
+                var index2Max = index1 + 10;
+                for (var index2 = index1; index2 < index2Max;) //This adds 10 values together
+                {
+                    var b = keysArray[noDataPoints - index2];// looking at the start, should be at the enf
+                    c += Convert.ToSingle(data[b]["1. open"]);
+                    index2++;
+                }
+                total += c / 10;
+                for (var i = 0; i < 10;)
+                {
+                    yValues[index1 + i] = total;
+                    i++;
+                }
+                index1 += 10;
+            }
+            return yValues;
+        }
+
         public static async Task<Dictionary<int, float>> LinearExtrapolation(JToken data, int noDataPoints)
         {
             //Get Equation
