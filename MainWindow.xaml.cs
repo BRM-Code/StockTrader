@@ -9,11 +9,12 @@ namespace StockTrader_.NET_Framework_
 {
     public partial class MainWindow
     {
-        public static string CurrentCompanyCode = "";
-        public static JToken CurrentCompanyJToken;
-        public static Portfolio UserPortfolio;
+        public static string CurrentCode = "";
+        public string CurrentName = "";
         public static float CurrentCompanyPrice;
-        public string CurrentCompanyName = "";
+        public string CurrentTimeFrame;
+        public JToken CurrentCompanyJToken;
+        public readonly Portfolio UserPortfolio;
 
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
@@ -34,56 +35,72 @@ namespace StockTrader_.NET_Framework_
 
         private async void FindData(string code,bool refresh)
         {
-            if (code == "") return;
-            if (Convert.ToInt32(Nodatapointslider.Value) == 0)return;
+            //This checks that the user has given the required data 
+            if ((Convert.ToInt32(Nodatapointslider.Value) == 0) || code == "") return;
+
+            //Setup Variables For the Method
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
+            var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
+            var lineGraph = new GraphHandler();
+            var predictionGraph = new GraphHandler();
+            if (CurrentTimeFrame == null)
+            {
+                CurrentTimeFrame = timeFrame;
+            }
+            if (CurrentCode != code || !(refresh) || CurrentTimeFrame != timeFrame)
+            {
+                CurrentCompanyJToken = Api.CollectData(code, timeFrame, this);
+            }
+            //Setup Variables that rely on The Collected data
+            var dataArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            //var currentTimeFrame = CurrentCompanyDataJToken[dataArray[0]]["4. Interval"];
+            var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
+
+            //Cleans up the input before drawing the graph
+            //This makes sure the user hasn't asked for more data than the JToken can provide
+            if (Convert.ToInt32(keysArray.Length) <= Convert.ToInt32(Nodatapointslider.Value))
+            {
+                Nodatapointslider.Value = keysArray.Length;
+            }
+            //This stops the user asking for more data than the API can provide for Weekly and Monthly
+            if (noDataPoints >= 100 & (timeFrame == "Weekly" || timeFrame == "Monthly"))
+            {
+                noDataPoints = 100;
+            }
+
+            //This draws the graphs
+            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints, this);
+            if (PredictionMethodComboBox.Text != "Off")
+            {
+                await predictionGraph.PredictionDraw(CurrentCompanyJToken, noDataPoints, this);
+            }
+
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
             {
                 ExtremeDataWarning.Content = $"Warning:\n ExtremeData Mode doesn't work with {timeFrame}";
             }
-            else
-            {
-                if ((string) ExtremeDataWarning.Content != "Extreme data mode enabled")
-                {
-                    ExtremeDataWarning.Content = "Extreme data mode enabled";
-                }
-            }
-            if (CurrentCompanyCode != code || refresh)
-            {
-                CurrentCompanyJToken = Api.CollectData(code, timeFrame);
-            }
+            else {ExtremeDataWarning.Content = "Extreme data mode enabled";}
+
+            //Adds values the labels to the right of the window
             plotter.BottomTitle = timeFrame;
-            CurrentCompanyCode = CurrentCompanyName;
-            currentCompany.Content = CurrentCompanyName;
-            var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            CurrentCode = code;
+            CurrentTimeFrame = timeFrame;
+            currentCompany.Content = CurrentName;
             CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
             CurrentPrice.Content = CurrentCompanyPrice;
             HighLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
             LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
             Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
-            if (Convert.ToInt32(keysArray.Length) <= Convert.ToInt32(Nodatapointslider.Value))
-            {
-                Nodatapointslider.Value = keysArray.Length;
-            }
-            var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
-            if (noDataPoints >= 100 & (timeFrame == "Weekly" || timeFrame == "Monthly"))
-            {
-                 noDataPoints = 100;
-            }
-            var lineGraph = new GraphHandler();
-            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints, this);
-            var predictionGraph = new GraphHandler();
-            await predictionGraph.PredictionDraw(CurrentCompanyJToken, noDataPoints,this);
         }
 
-        private static void TraderButtonHandler(bool isBuyBox)
+        private void TraderButtonHandler(bool isBuyBox)
         {
-            if (CurrentCompanyCode == "")
+            if (CurrentCode == "")
             {
                 System.Windows.MessageBox.Show("No Company Selected!", "Error");
                 return;
             }
-            var newBuyBox = new BuyBox(isBuyBox);
+            var newBuyBox = new BuyBox(isBuyBox, this);
             newBuyBox.Show();
         }
 
@@ -107,7 +124,7 @@ namespace StockTrader_.NET_Framework_
 
         private void ButtonHandler(object sender, RoutedEventArgs e)
         {
-            CurrentCompanyName = ((System.Windows.Controls.Button)sender).Content.ToString();
+            CurrentName = ((System.Windows.Controls.Button)sender).Content.ToString();
             var code = (string) ((System.Windows.Controls.Button) sender).Tag; 
             FindData(code,false);
         }
@@ -131,11 +148,6 @@ namespace StockTrader_.NET_Framework_
             Close();
         }
 
-        private void TimeframeComboBox_OnDropDownClosed(object sender, EventArgs e)
-        { 
-            FindData(CurrentCompanyCode, false);
-        }
-
         private void Close(object sender, RoutedEventArgs e)
         {
             _currentStartup.Shutdown(UserPortfolio,this);
@@ -147,14 +159,9 @@ namespace StockTrader_.NET_Framework_
             database.SavePortfolio(UserPortfolio);
         }
 
-        private void AlgorithmChange(object sender, EventArgs e)
-        {
-            FindData(CurrentCompanyCode, true);
-        }
-
         private void Refresh(object sender, RoutedEventArgs e)
         {
-            FindData(CurrentCompanyCode, true);
+            FindData(CurrentCode, true);
         }
     }
 }

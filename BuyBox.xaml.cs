@@ -8,9 +8,11 @@ namespace StockTrader_.NET_Framework_
     public partial class BuyBox
     {
         private readonly bool _isBuyBox;
+        private readonly MainWindow _currentMainWindow;
 
-        public BuyBox(bool isBuyBox)
+        public BuyBox(bool isBuyBox, MainWindow mainWindow)
         {
+            _currentMainWindow = mainWindow;
             _isBuyBox = isBuyBox;
             InitializeComponent();
             Title.Content = _isBuyBox switch
@@ -18,7 +20,7 @@ namespace StockTrader_.NET_Framework_
                 true => "Buy",
                 false => "Sell"
             };
-            var currentCompanyJToken = MainWindow.CurrentCompanyJToken;
+            var currentCompanyJToken = mainWindow.CurrentCompanyJToken;
             current.Content = Convert.ToSingle(currentCompanyJToken[currentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
 
@@ -28,10 +30,10 @@ namespace StockTrader_.NET_Framework_
             switch (_isBuyBox)
             {
                 case true:
-                    Trader.Buy(MainWindow.CurrentCompanyCode, Convert.ToInt32(noShares));
+                    _currentMainWindow.UserPortfolio.Buy(MainWindow.CurrentCode, Convert.ToInt32(noShares));
                     break;
                 case false:
-                    Trader.Sell(MainWindow.CurrentCompanyCode, Convert.ToInt32(noShares));
+                    _currentMainWindow.UserPortfolio.Sell(MainWindow.CurrentCode, Convert.ToInt32(noShares));
                     break;
             }
             Close();

@@ -19,20 +19,20 @@ namespace StockTrader_.NET_Framework_
         private static List<int> _activePairs = new List<int>(3){0,1,2};
         private static Timer _cooldownTimer;
 
-        public static JToken CollectData(string company,string timeFrame)
+        public static JToken CollectData(string company,string timeFrame, MainWindow mainWindow)
         {
             var url = CreateUrl(company,timeFrame);
-            var valuesJToken = GetResponse(url,timeFrame);
+            var valuesJToken = GetResponse(url,timeFrame,mainWindow);
             if (valuesJToken == null)
             {
                 ProxykeyCooldown(_activePairs[0]);
                 _activePairs.Remove(_activePairs[0]);
-                CollectData(company,timeFrame);
+                CollectData(company,timeFrame, mainWindow);
             }
             return valuesJToken;
         }
 
-        private static JToken GetResponse(Uri uri,string timeFrame)
+        private static JToken GetResponse(Uri uri,string timeFrame, MainWindow mainWindow)
         {
             var myProxy = new WebProxy();
             Uri newUri = null;
@@ -44,18 +44,23 @@ namespace StockTrader_.NET_Framework_
             {
                 MessageBox.Show("Used the 15 requests per minute", "Error");
             }
-            using var wb = new WebClient();
+            var wb = new WebClient();
             myProxy.Address = newUri;
             myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
             wb.Proxy = myProxy;
-            string apIresponse;
-            try {apIresponse = wb.DownloadString(uri);}
+            string apiResponse;
+            try
+            {
+                apiResponse = wb.DownloadString(uri);
+                wb.Dispose();
+            }
             catch
             {
                 MessageBox.Show("No response from API, check connection", "Error");
                 return null;
             }
-            var responseJObject = JObject.Parse(apIresponse);
+
+            var responseJObject = JObject.Parse(apiResponse);
             if (responseJObject.ContainsKey("Note"))
             {
                 return null;
@@ -75,7 +80,6 @@ namespace StockTrader_.NET_Framework_
         
         private static Uri CreateUrl(string company,string timeFrame)
         {
-            using var wb = new WebClient();
             var build = new UriBuilder {Host = "www.alphavantage.co/query"}; //Setting up the UriBuilder
             var extraDataParameter = "";
             switch(timeFrame)

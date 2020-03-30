@@ -88,7 +88,7 @@
         <Slider x:Name="Nodatapointslider" HorizontalAlignment="Center" Width="300" Maximum="100" Minimum="0" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="3"/>
         <Label x:Name="ExtremeDataWarning" Content="Extreme data mode enabled" Visibility="Hidden" Grid.Column="9" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
         <Label Content="Time frame:" Grid.Column="9" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="TimeframeComboBox" DropDownClosed="TimeframeComboBox_OnDropDownClosed" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
+        <ComboBox x:Name="TimeframeComboBox" Grid.Row="3" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
             <ComboBoxItem Content="IntraDay"/>
             <ComboBoxItem Content="Daily"/>
             <ComboBoxItem Content="Weekly"/>
@@ -96,9 +96,10 @@
         </ComboBox>
 
         <Label Content="Prediction Algorithm:" Grid.Column="9" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="PredictionMethodComboBox" DropDownClosed="AlgorithmChange" Grid.Row="4" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
+        <ComboBox x:Name="PredictionMethodComboBox" Grid.Row="4" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
+            <ComboBoxItem Content="Off" IsSelected="True"/>
             <ComboBoxItem Content="Moving Average"/>
-            <ComboBoxItem IsSelected="True" Content="Linear Extrapolation"/>
+            <ComboBoxItem Content="Linear Extrapolation"/>
         </ComboBox>
 
         <Button Content="Refresh" Click="Refresh" Grid.Column="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="75"/>

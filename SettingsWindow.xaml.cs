@@ -14,17 +14,17 @@ namespace StockTrader_.NET_Framework_
         {
             _currentStartup = currentStartup;
             InitializeComponent();
-            currentServer.Content = Startup.Settings.SQLServer;
-            currentDatabase.Content = Startup.Settings.SQLDatabase;
-            currentUser.Content = Startup.Settings.SQLUser;
+            currentServer.Content = Startup.Settings.SqlServer;
+            currentDatabase.Content = Startup.Settings.SqlDatabase;
+            currentUser.Content = Startup.Settings.SqlUser;
         }
 
         private void ApplyButton(object sender, RoutedEventArgs e)
         {
-            if (Password.Password != "") Startup.Settings.SQLPassword = Password.Password;
-            if (ServerAddressEntry.Text != "" && _isInvalidAddress == false) Startup.Settings.SQLServer = ServerAddressEntry.Text; 
-            if (DatabaseEntry.Text != "") Startup.Settings.SQLDatabase = DatabaseEntry.Text; 
-            if (Username.Text != "") Startup.Settings.SQLUser = Username.Text;
+            if (Password.Password != "") Startup.Settings.SqlPassword = Password.Password;
+            if (ServerAddressEntry.Text != "" && _isInvalidAddress == false) Startup.Settings.SqlServer = ServerAddressEntry.Text; 
+            if (DatabaseEntry.Text != "") Startup.Settings.SqlDatabase = DatabaseEntry.Text; 
+            if (Username.Text != "") Startup.Settings.SqlUser = Username.Text;
             Startup.Settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
             this.Close();

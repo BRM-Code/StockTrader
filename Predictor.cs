@@ -6,12 +6,12 @@ using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    static class Predictor
+    internal static class Predictor
     {
         public static async Task<float[]> SMA(JToken data, int noDataPoints)// for this one we only need to calculate y
         {
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            var yValues = new float[noDataPoints];
+            var yValues = new float[noDataPoints/10];
             for (var index1 = 0; index1 < noDataPoints;)
             {
                 float c = 0;
@@ -24,11 +24,7 @@ namespace StockTrader_.NET_Framework_
                     index2++;
                 }
                 total += c / 10;
-                for (var i = 0; i < 10;)
-                {
-                    yValues[index1 + i] = total;
-                    i++;
-                }
+                yValues[index1/10] = total;
                 index1 += 10;
             }
             return yValues;
@@ -55,9 +51,9 @@ namespace StockTrader_.NET_Framework_
         private static async Task<Dictionary<float,float>> LeEquation(JToken data, int noDataPoints)//Get Equation
         {
             var ey = await Predictor.ey(data, noDataPoints);
-            var ex = await Predictor.ex(noDataPoints);
-            var exSquared = await Predictor.exSquared(noDataPoints);
-            var exy = await Predictor.exy(data, noDataPoints);
+            var ex = await Predictor.Ex(noDataPoints);
+            var exSquared = await Predictor.ExSquared(noDataPoints);
+            var exy = await Predictor.Exy(data, noDataPoints);
             var a = ((ey * exSquared) - (ex * exy)) / ((noDataPoints * exSquared) - (ex) *(ex));
             var b = (((noDataPoints*(exy)) - ((ex) * (ey))) / ((noDataPoints * exSquared) - ((ex) * (ex))));
             //y = a + bx
@@ -78,7 +74,7 @@ namespace StockTrader_.NET_Framework_
             return y;
         }
 
-        private static async Task<float> exy(JToken data, int noDataPoints)
+        private static async Task<float> Exy(JToken data, int noDataPoints)
         {
             float exy = 0;
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
@@ -91,7 +87,7 @@ namespace StockTrader_.NET_Framework_
             return exy;
         }
 
-        private static async Task<int> ex(int noDataPoints)
+        private static async Task<int> Ex(int noDataPoints)
         {
             int x = 0;
             for (int i = 0; i < noDataPoints;)
@@ -102,7 +98,7 @@ namespace StockTrader_.NET_Framework_
             return x;
         }
 
-        private static async Task<int> exSquared(int noDataPoints)
+        private static async Task<int> ExSquared(int noDataPoints)
         {
             int xSquared = 0;
             for (int i = 1; i < noDataPoints;)

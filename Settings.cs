@@ -3,9 +3,9 @@
     public class Settings
     {
         public bool ExtremeData = false;
-        public string SQLServer = "db.jakewalker.xyz";
-        public string SQLDatabase = "benrm1";
-        public string SQLUser = "benrm";
-        public string SQLPassword = "tiWuSIMo4IBo";
+        public string SqlServer = "db.jakewalker.xyz";
+        public string SqlDatabase = "benrm1";
+        public string SqlUser = "benrm";
+        public string SqlPassword = "tiWuSIMo4IBo";
     }
 }
