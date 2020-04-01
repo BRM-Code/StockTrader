@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using Debug = System.Diagnostics.Debug;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -35,44 +36,46 @@ namespace StockTrader_.NET_Framework_
 
         private async void FindData(string code,bool refresh)
         {
+            Debug.WriteLine($"Request to Draw the Graph with {code} and refresh is {refresh}");
             //This checks that the user has given the required data 
             if ((Convert.ToInt32(Nodatapointslider.Value) == 0) || code == "") return;
 
             //Setup Variables For the Method
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
-            var lineGraph = new GraphHandler();
-            var predictionGraph = new GraphHandler();
             if (CurrentTimeFrame == null)
             {
+                Debug.WriteLine("Timeframe was null");
                 CurrentTimeFrame = timeFrame;
             }
             if (CurrentCode != code || !(refresh) || CurrentTimeFrame != timeFrame)
             {
-                CurrentCompanyJToken = Api.CollectData(code, timeFrame, this);
+                Debug.WriteLine("Fetching Data...");
+                CurrentCompanyJToken = Api.CollectData(code, timeFrame);
+                Debug.WriteLine("Data Received");
             }
+
             //Setup Variables that rely on The Collected data
-            var dataArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            //var currentTimeFrame = CurrentCompanyDataJToken[dataArray[0]]["4. Interval"];
             var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
 
             //Cleans up the input before drawing the graph
             //This makes sure the user hasn't asked for more data than the JToken can provide
-            if (Convert.ToInt32(keysArray.Length) <= Convert.ToInt32(Nodatapointslider.Value))
+            if (Convert.ToInt32(keysArray.Length) < Convert.ToInt32(Nodatapointslider.Value))
             {
+                Debug.WriteLine("Lowering number of data points");
                 Nodatapointslider.Value = keysArray.Length;
+                noDataPoints = keysArray.Length;
             }
             //This stops the user asking for more data than the API can provide for Weekly and Monthly
-            if (noDataPoints >= 100 & (timeFrame == "Weekly" || timeFrame == "Monthly"))
+            if (noDataPoints >= 240 & (timeFrame == "Weekly" || timeFrame == "Monthly"))
             {
-                noDataPoints = 100;
+                noDataPoints = 240;
             }
-
             //This draws the graphs
-            await lineGraph.Draw(CurrentCompanyJToken, noDataPoints, this);
+            await GraphHandler.Draw(CurrentCompanyJToken, noDataPoints, this);
             if (PredictionMethodComboBox.Text != "Off")
             {
-                await predictionGraph.PredictionDraw(CurrentCompanyJToken, noDataPoints, this);
+                await GraphHandler.PredictionDraw(CurrentCompanyJToken, noDataPoints, this);
             }
 
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
@@ -131,6 +134,7 @@ namespace StockTrader_.NET_Framework_
 
         private void ValueUpdater(object sender, EventArgs e)
         {
+            Debug.WriteLine("Updating Values...");
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
         }
@@ -143,6 +147,7 @@ namespace StockTrader_.NET_Framework_
 
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
+            Debug.WriteLine("Opening Settings...");
             var settingsWindow = new SettingsWindow(_currentStartup);
             settingsWindow.Show();
             Close();
@@ -162,6 +167,18 @@ namespace StockTrader_.NET_Framework_
         private void Refresh(object sender, RoutedEventArgs e)
         {
             FindData(CurrentCode, true);
+        }
+
+        private void TimeframeComboBox_OnDropDownClosed(object sender, EventArgs e)
+        {
+            if (TimeframeComboBox.Text == "Monthly" || TimeframeComboBox.Text == "Weekly")
+            {
+                Nodatapointslider.Maximum = 240;
+            }
+            else
+            {
+                Nodatapointslider.Maximum = 100;
+            }
         }
     }
 }

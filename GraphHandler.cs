@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Debug = System.Diagnostics.Debug;
 
 namespace StockTrader_.NET_Framework_
 {
-    internal class GraphHandler
+    internal static class GraphHandler
     {
-        public async Task Draw(JToken data, int noDataPoints, MainWindow mainWindow)
+        public static async Task Draw(JToken data, int noDataPoints, MainWindow mainWindow)
         {
+            Debug.WriteLine("Drawing Graph...");
             mainWindow.lines.Children.Clear();
             if (data == null || noDataPoints == 0) return;
             var y = await DrawY(data, noDataPoints);
@@ -23,10 +25,13 @@ namespace StockTrader_.NET_Framework_
             newline.Description = $"{mainWindow.CurrentName}'s Price";
             newline.StrokeThickness = 2;
             newline.Plot(x, y);
+            Debug.WriteLine("Graph Drawn");
         }
 
-        public async Task PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
+
+        public static async Task PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
         {
+            Debug.WriteLine("Drawing Prediction Graph...");
             IEnumerable x = null;
             IEnumerable y = null;
             var algorithm = mainWindow.PredictionMethodComboBox.SelectionBoxItem.ToString();
@@ -41,43 +46,47 @@ namespace StockTrader_.NET_Framework_
                     }
                 case "Moving Average":
                     {
-                        var predictedValues = await Predictor.SMA(data, noDataPoints);
                         x = await DrawX(noDataPoints,true);
-                        y = predictedValues;
+                        y = await Predictor.Sma(data, noDataPoints);
                         break;
                     }
             }
             var newline = new LineGraph();
             mainWindow.lines.Children.Add(newline);
-            newline.Stroke = new SolidColorBrush(Colors.Orange);
+            newline.Stroke = new SolidColorBrush(Colors.Green);
             newline.Description = $"{mainWindow.CurrentName}'s Trend";
             newline.StrokeThickness = 2;
             newline.Plot(x, y);
+            Debug.WriteLine("Graph Drawn");
         }
 
         private static async Task<float[]> DrawY(JToken data, int noDataPoints)
         {
+            Debug.WriteLine("Fetching Values for Y...");
             var y = new float[noDataPoints];
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            for (int i = 0; i < noDataPoints;)
+            for (var i = 0; i < noDataPoints;)
             {
                 var a = keysArray[noDataPoints - i - 1];
                 y[i] = Convert.ToSingle(data[a]["1. open"]);
                 i++;
             }
+            Debug.WriteLine("Fetched Values for Y");
             return y;
         }
 
         private static async Task<List<int>> DrawX(int noDataPoints,bool isSMA)
         {
+            Debug.WriteLine("Fetching Values for X...");
             var a = 1;
             if (isSMA)a = 10;
-            List<int> x = new List<int>();
-            for (int i = 0; i < noDataPoints;)
+            var x = new List<int>();
+            for (var i = 0; i < noDataPoints;)
             {
                 x.Add(i);
                 i += a;
             }
+            Debug.WriteLine("Fetched Values for X");
             return x;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -8,23 +9,42 @@ namespace StockTrader_.NET_Framework_
 {
     internal static class Predictor
     {
-        public static async Task<float[]> SMA(JToken data, int noDataPoints)// for this one we only need to calculate y
+        public static async Task<float[]> Sma(JToken data, int noDataPoints)// for this one we only need to calculate y
         {
+            Debug.WriteLine("Finding SMA...");
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
-            var yValues = new float[noDataPoints/10];
+            Debug.WriteLine($"Using a array of {keysArray.Length} values...");
+            var arrayLength = Convert.ToSingle(noDataPoints) / 10.0;
+            var yValues = new float[(int) Math.Ceiling((decimal) arrayLength)];
             for (var index1 = 0; index1 < noDataPoints;)
             {
+                var fractional = false;
                 float c = 0;
                 float total = 0;
                 var index2Max = index1 + 10;
-                for (var index2 = index1; index2 < index2Max;) //This adds 10 values together
+                int index2;
+                for (index2 = index1; index2 < index2Max;) //This adds 10 values together
                 {
-                    var b = keysArray[noDataPoints - index2];// looking at the start, should be at the enf
+                    if (index2 == keysArray.Length)
+                    {
+                        fractional = true;
+                        break;
+                    }
+                    var b = keysArray[noDataPoints - index2 - 1];
                     c += Convert.ToSingle(data[b]["1. open"]);
                     index2++;
                 }
-                total += c / 10;
-                yValues[index1/10] = total;
+
+                if (fractional)
+                {
+                    total += c / (index2 - (index2Max - 10));
+                }
+                else
+                {
+                    total += c / 10;
+                }
+                Debug.WriteLine($"Assigning Value at index {index1 / 10}");
+                yValues[index1 / 10] = total;
                 index1 += 10;
             }
             return yValues;
