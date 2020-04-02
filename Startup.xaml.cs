@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -12,9 +13,10 @@ namespace StockTrader_.NET_Framework_
         {
             InitializeComponent();
             this.Show();
+            Settings.AutoTradeRules = new Dictionary<string, float>();
             UserPortfolio = _database.RetrievePortfolio(this);
             StartLabel.Visibility = Visibility.Visible;
-            MainWindow mainWindow = new MainWindow(UserPortfolio,this);
+            var mainWindow = new MainWindow(UserPortfolio,this);
             mainWindow.Show();
             this.Hide();
         }

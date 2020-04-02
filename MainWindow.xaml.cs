@@ -16,9 +16,12 @@ namespace StockTrader_.NET_Framework_
         public string CurrentTimeFrame;
         public JToken CurrentCompanyJToken;
         public readonly Portfolio UserPortfolio;
-
+        public static string[] codes = new[] { "AAPL", "MSFT", "GOOG", "UBER", "INTC", 
+                                                "IBM", "FB", "WDC", "NVDA", "ORCL", 
+                                                "AMZN", "AMD", "DELL", "ADBE", "EBAY", 
+                                                "SPOT" };
         private Timer _updateTimer;
-        private readonly Startup _currentStartup;
+        public readonly Startup _currentStartup;
 
         public MainWindow(Portfolio userPortfolio, Startup currentStartup)
         {
@@ -26,10 +29,17 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
-            IndicatorUpdater();
+            if (Startup.Settings.Indicators)
+            {
+                IndicatorUpdater();
+            }
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
-            if (!Startup.Settings.ExtremeData) return;
+            if (!Startup.Settings.ExtremeData)
+            {
+                Nodatapointslider.Maximum = 240;
+                return;
+            }
             ExtremeDataWarning.Visibility = Visibility.Visible;
             Nodatapointslider.Maximum = 1160;
             Nodatapointslider.TickFrequency = 100;
@@ -73,7 +83,7 @@ namespace StockTrader_.NET_Framework_
                 noDataPoints = 240;
             }
             //This draws the graphs
-            await GraphHandler.Draw(CurrentCompanyJToken, noDataPoints, this);
+            await GraphHandler.Draw(CurrentCompanyJToken, noDataPoints, this,0);
             if (PredictionMethodComboBox.Text != "Off")
             {
                 await GraphHandler.PredictionDraw(CurrentCompanyJToken, noDataPoints, this);
@@ -85,6 +95,11 @@ namespace StockTrader_.NET_Framework_
             }
             else {ExtremeDataWarning.Content = "Extreme data mode enabled";}
 
+            if (Startup.Settings.AutoTradeRules.ContainsKey(code.ToUpper()))
+            {
+                var minimum = Startup.Settings.AutoTradeRules[code.ToUpper()];
+                await GraphHandler.Draw(null, noDataPoints, this, minimum);
+            }
             //Adds values the labels to the right of the window
             plotter.BottomTitle = timeFrame;
             CurrentCode = code;
@@ -136,7 +151,10 @@ namespace StockTrader_.NET_Framework_
 
         private void ValueUpdater(object sender, EventArgs e)
         {
-            IndicatorUpdater();
+            if (Startup.Settings.Indicators)
+            {
+                IndicatorUpdater();
+            }
             Debug.WriteLine("Updating Values...");
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
@@ -144,7 +162,6 @@ namespace StockTrader_.NET_Framework_
 
         private void IndicatorUpdater()
         {
-            var codes = new[] {"AAPL","MSFT","GOOG","UBER","INTC","IBM","FB","WDC","NVDA","ORCL","AMZN","AMD","DELL","ADBE", "EBAY", "SPOT"};
             var images = new[]
             {
                 AAPLIndicator, MSFTIndicator, GOOGIndicator, UBERIndicator, INTCIndicator, IBMIndicator, FBIndicator,
@@ -156,6 +173,15 @@ namespace StockTrader_.NET_Framework_
                 var data = Api.CollectDataSmall(codes[i]);
                 var dataDictionary = data.ToObject<Dictionary<string, float>>();
                 Uri source;
+                if (Startup.Settings.AutoTradeRules.ContainsKey(codes[i]))
+                {
+                    if (dataDictionary["c"] < Startup.Settings.AutoTradeRules[codes[i].ToUpper()])
+                    {
+                        var shares = UserPortfolio.SharesDictionary[codes[i]].Shares;
+                        Debug.WriteLine($"AutoSale triggered for {codes[i].ToUpper()}, sold {shares}");
+                        UserPortfolio.Sell(codes[i], shares);
+                    }
+                }
                 if (dataDictionary["c"] > dataDictionary["pc"])
                 {
                     Debug.WriteLine($"Changing {codes[i]} to UP");
@@ -219,6 +245,12 @@ namespace StockTrader_.NET_Framework_
             var window = new PortfolioView(_currentStartup);
             window.Show();
             Close();
+        }
+
+        private void AutoSaleButton(object sender, RoutedEventArgs e)
+        {
+            var window = new AutoTrader();
+            window.Show();
         }
     }
 }

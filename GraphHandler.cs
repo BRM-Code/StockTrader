@@ -12,8 +12,25 @@ namespace StockTrader_.NET_Framework_
 {
     internal static class GraphHandler
     {
-        public static async Task Draw(JToken data, int noDataPoints, MainWindow mainWindow)
+        public static async Task Draw(JToken data, int noDataPoints, MainWindow mainWindow, float minimum)
         {
+            if (minimum != 0)
+            {
+                var z = await DrawX(noDataPoints, false);
+                var w = new float[noDataPoints];
+                for (var i = 0; i < noDataPoints;)
+                {
+                    w[i] = minimum;
+                    i++;
+                }
+                var minimumLine = new LineGraph();
+                mainWindow.lines.Children.Add(minimumLine);
+                minimumLine.Stroke = new SolidColorBrush(Colors.Red);
+                minimumLine.Description = $"{mainWindow.CurrentName}'s Price";
+                minimumLine.StrokeThickness = 2;
+                minimumLine.Plot(z, w);
+                return;
+            }
             Debug.WriteLine("Drawing Graph...");
             mainWindow.lines.Children.Clear();
             if (data == null || noDataPoints == 0) return;

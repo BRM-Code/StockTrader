@@ -1,0 +1,28 @@
+﻿<Window x:Class="StockTrader_.NET_Framework_.AutoTrader"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="AutoTrader" Height="400" Width="300" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Auto Trader" FontSize="40" Grid.ColumnSpan="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="0"/>
+        <Label Content="Company:" FontSize="20" Grid.ColumnSpan="4" VerticalAlignment="Top" HorizontalAlignment="Center"  Grid.Row="1"/>
+        <ComboBox x:Name="ComboBox" Grid.Column="0" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="120" Grid.ColumnSpan="4"/>
+        <Label Content="Minimum Value:" FontSize="20" Grid.ColumnSpan="4" VerticalAlignment="Top" HorizontalAlignment="Center"  Grid.Row="2"/>
+        <TextBox x:Name="value" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Center" Height="23" TextAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="120"/>
+        <Button Content="Submit" Click="ButtonBase_OnClick" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2"/>
+    </Grid>
+</Window>

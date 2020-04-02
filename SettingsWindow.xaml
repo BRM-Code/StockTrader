@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Closed="OnClosing"
         FontFamily="Roboto"
-        Title="Settings" Height="700" Width="1200" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
+        Title="Settings" Height="720" Width="1200" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -20,17 +20,17 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Settings" FontSize="40" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="0"/>
 

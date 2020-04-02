@@ -1,4 +1,6 @@
-﻿namespace StockTrader_.NET_Framework_
+﻿using System.Collections.Generic;
+
+namespace StockTrader_.NET_Framework_
 {
     public class Settings
     {
@@ -8,5 +10,6 @@
         public string SqlDatabase = "benrm1";
         public string SqlUser = "benrm";
         public string SqlPassword = "tiWuSIMo4IBo";
+        public Dictionary<string, float> AutoTradeRules;
     }
 }
