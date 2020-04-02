@@ -21,18 +21,19 @@ namespace StockTrader_.NET_Framework_
 
         private void ApplyButton(object sender, RoutedEventArgs e)
         {
-            if (Password.Password != "") Startup.Settings.SqlPassword = Password.Password;
-            if (ServerAddressEntry.Text != "" && _isInvalidAddress == false) Startup.Settings.SqlServer = ServerAddressEntry.Text; 
-            if (DatabaseEntry.Text != "") Startup.Settings.SqlDatabase = DatabaseEntry.Text; 
-            if (Username.Text != "") Startup.Settings.SqlUser = Username.Text;
-            Startup.Settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
+            var settings = Startup.Settings;
+            if (Password.Password != "") settings.SqlPassword = Password.Password;
+            if (ServerAddressEntry.Text != "" && _isInvalidAddress == false) settings.SqlServer = ServerAddressEntry.Text; 
+            if (DatabaseEntry.Text != "") settings.SqlDatabase = DatabaseEntry.Text; 
+            if (Username.Text != "") settings.SqlUser = Username.Text;
+            settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
             this.Close();
         }
 
         private void OnClosing(object sender, EventArgs e)
         {
-            MainWindow mainWindow = new MainWindow(Startup.UserPortfolio, _currentStartup);
+            var mainWindow = new MainWindow(_currentStartup.UserPortfolio, _currentStartup);
             mainWindow.Show();
         }
 

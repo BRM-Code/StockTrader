@@ -21,7 +21,7 @@ namespace StockTrader_.NET_Framework_
     public class Portfolio
     {
         public float AvailableFunds;// how much money the account has available to spend on shares
-        private Dictionary<string, StockStorage> SharesDictionary;// string is the companies codes and a StockStorage instance
+        public Dictionary<string, StockStorage> SharesDictionary;// string is the companies codes and a StockStorage instance
 
         public Portfolio()
         {
@@ -32,8 +32,8 @@ namespace StockTrader_.NET_Framework_
         public float CalculateTotalAccountValue()
         {
             float totalAccountValue = 0;
-            string[] keys = SharesDictionary.Keys.ToArray();
-            StockStorage[] shares = SharesDictionary.Values.ToArray();
+            var keys = SharesDictionary.Keys.ToArray();
+            var shares = SharesDictionary.Values.ToArray();
             for (var i = 0; i < keys.Length;)
             {
                 totalAccountValue = MainWindow.CurrentCompanyPrice * shares[i].Shares + totalAccountValue;

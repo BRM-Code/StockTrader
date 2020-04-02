@@ -141,7 +141,7 @@ namespace StockTrader_.NET_Framework_
 
         private void OnClosing(object sender, EventArgs e)
         {
-            Startup.UserPortfolio = UserPortfolio;
+            _currentStartup.UserPortfolio = UserPortfolio;
             _updateTimer.Dispose();
         }
 
@@ -179,6 +179,14 @@ namespace StockTrader_.NET_Framework_
             {
                 Nodatapointslider.Maximum = 100;
             }
+        }
+
+        private void OpenPortfolioView(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Opening Portfolio View...");
+            var window = new PortfolioView(_currentStartup);
+            window.Show();
+            Close();
         }
     }
 }

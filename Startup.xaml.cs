@@ -4,7 +4,7 @@ namespace StockTrader_.NET_Framework_
 {
     public partial class Startup
     {
-        public static Portfolio UserPortfolio;
+        public Portfolio UserPortfolio;
         private readonly DatabaseHandler _database = new DatabaseHandler();
         public static readonly Settings Settings = new Settings();
 

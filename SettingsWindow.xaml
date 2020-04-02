@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Closed="OnClosing"
+        FontFamily="Roboto"
         Title="Settings" Height="700" Width="1200" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>

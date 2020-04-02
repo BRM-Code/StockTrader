@@ -21,7 +21,7 @@ namespace StockTrader_.NET_Framework_
                 false => "Sell"
             };
             var currentCompanyJToken = mainWindow.CurrentCompanyJToken;
-            current.Content = Convert.ToSingle(currentCompanyJToken[currentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            Current.Content = Convert.ToSingle(currentCompanyJToken[currentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
         }
 
         private void Submit(object sender, RoutedEventArgs e)
