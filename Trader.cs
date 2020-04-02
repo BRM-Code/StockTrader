@@ -6,13 +6,11 @@ namespace StockTrader_.NET_Framework_
 {
     public class StockStorage
     {
-        public string Company;
         public int Shares;
         public float PriceBought;//used to calculate if the user has made a loss or not on the share
 
-        public StockStorage(string company, int shares, float price)
+        public StockStorage(int shares, float price)
         {
-            Company = company;
             Shares = shares;
             PriceBought = price;
         }
@@ -36,7 +34,8 @@ namespace StockTrader_.NET_Framework_
             var shares = SharesDictionary.Values.ToArray();
             for (var i = 0; i < keys.Length;)
             {
-                totalAccountValue = MainWindow.CurrentCompanyPrice * shares[i].Shares + totalAccountValue;
+                var dataDictionary = Api.CollectDataSmall(keys[i]).ToObject<Dictionary<string, float>>();
+                totalAccountValue = dataDictionary["c"] * shares[i].Shares + totalAccountValue;
                 i++;
             }
             return totalAccountValue;
@@ -44,14 +43,15 @@ namespace StockTrader_.NET_Framework_
 
         public void Buy(string company, int shares)
         {
+            var dataDictionary = Api.CollectDataSmall(company).ToObject<Dictionary<string, float>>();
             if (SharesDictionary.ContainsKey(company))//Checks if the user has any shares of that company
             {
                 SharesDictionary[company].Shares += shares;
-                AvailableFunds -= MainWindow.CurrentCompanyPrice * shares;
+                AvailableFunds -= dataDictionary["c"] * shares;
                 return;
             }
-            var buy = new StockStorage(company, shares, MainWindow.CurrentCompanyPrice);
-            AvailableFunds -= MainWindow.CurrentCompanyPrice * shares;
+            var buy = new StockStorage(shares, dataDictionary["c"]);
+            AvailableFunds -= dataDictionary["c"] * shares;
             SharesDictionary.Add(company, buy);
         }
 
@@ -69,7 +69,8 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
             SharesDictionary[company].Shares -= shares;//removes the number of shares from that companies in the dictionary
-            AvailableFunds += MainWindow.CurrentCompanyPrice * shares;//add the value of the sold stocks to the users available funds
+            var dataDictionary = Api.CollectDataSmall(company).ToObject<Dictionary<string, float>>();
+            AvailableFunds += dataDictionary["c"] * shares;//add the value of the sold stocks to the users available funds
         }
     }
 }

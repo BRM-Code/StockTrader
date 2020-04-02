@@ -19,9 +19,39 @@ namespace StockTrader_.NET_Framework_
         };
         private static List<int> _activePairs = new List<int>(3){0,1,2};
         private static Timer _cooldownTimer;
+        private static Timer _cacheClearTimer;
+        private static Dictionary<string, JToken> Cache = new Dictionary<string, JToken>();
 
-        public static JToken CollectData(string company,string timeFrame)
+        public static JToken CollectDataSmall(string company)
         {
+            Debug.WriteLine("Fetching Response...");
+            var apiResponse = "";
+            var wb = new WebClient();
+            var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={company.ToUpper()}&token=bq2u8afrh5rfg81l876g");
+            try
+            {
+                Debug.WriteLine("Sending Request...");
+                apiResponse = wb.DownloadString(uri);
+                wb.Dispose();
+            }
+            catch
+            {
+                MessageBox.Show("No response from API, check connection", "Error");
+                return null;
+            }
+            var response = JToken.Parse(apiResponse);
+            return response;
+        }
+
+        public static JToken CollectDataLarge(string company,string timeFrame)
+        {
+            var comboString = company + timeFrame;
+            CacheClearTimer();
+            if (Cache.ContainsKey(comboString))
+            {
+                Debug.WriteLine("Response Found in cache");
+                return Cache[comboString];
+            }
             Debug.WriteLine("Started Collecting Data...");
             var url = CreateUrl(company,timeFrame);
             var valuesJToken = GetResponse(url,timeFrame);
@@ -30,8 +60,9 @@ namespace StockTrader_.NET_Framework_
                 Debug.WriteLine("Got a null response, switching proxy...");
                 ProxykeyCooldown(_activePairs[0]);
                 _activePairs.Remove(_activePairs[0]);
-                CollectData(company,timeFrame);
+                CollectDataLarge(company,timeFrame);
             }
+            Cache.Add(comboString,valuesJToken);
             Debug.WriteLine("Data Collected");
             return valuesJToken;
         }
@@ -39,20 +70,23 @@ namespace StockTrader_.NET_Framework_
         private static JToken GetResponse(Uri uri,string timeFrame)
         {
             Debug.WriteLine("Fetching Response...");
-            var myProxy = new WebProxy();
-            Uri newUri = null;
-            try
-            {
-                newUri = new Uri($"http://{ProxyKeyPairDictionary.Values.ToArray()[_activePairs[0]]}");
-            }
-            catch
-            {
-                MessageBox.Show("Used the 15 requests per minute", "Error");
-            }
             var wb = new WebClient();
-            myProxy.Address = newUri;
-            myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
-            wb.Proxy = myProxy;
+            if (ProxyKeyPairDictionary.Values.ToArray()[_activePairs[0]] != "")
+            {
+                var myProxy = new WebProxy();
+                Uri newUri = null;
+                try
+                {
+                    newUri = new Uri($"http://{ProxyKeyPairDictionary.Values.ToArray()[_activePairs[0]]}");
+                }
+                catch
+                {
+                    MessageBox.Show("Used the 15 requests per minute", "Error");
+                }
+                myProxy.Address = newUri;
+                myProxy.Credentials = new NetworkCredential("proxy", "c4yDXnYsbD");
+                wb.Proxy = myProxy;
+            }
             string apiResponse;
             try
             {
@@ -81,6 +115,7 @@ namespace StockTrader_.NET_Framework_
                 _ => "Error"
             };
             var values = responseJObject[jObjectName];
+
             try
             {
                 var valuesLength = values.ToObject<Dictionary<string, object>>().Keys.ToArray();
@@ -125,16 +160,31 @@ namespace StockTrader_.NET_Framework_
             Debug.WriteLine("Started Cooldown Timer...");
             _cooldownTimer = new Timer();
             _cooldownTimer.Tick += Refresh(removedPair);
-            _cooldownTimer.Interval = 60000;
+            _cooldownTimer.Interval = 60000;//1 minute
             _cooldownTimer.Start();
         }
-        
+
+        private static void CacheClearTimer()
+        {
+            Debug.WriteLine("Started Cache Clear Timer...");
+            _cacheClearTimer = new Timer();
+            _cacheClearTimer.Tick += CacheClear();
+            _cacheClearTimer.Interval = 300000;//5 minutes
+            _cacheClearTimer.Start();
+        }
+
         private static EventHandler Refresh(int removedPair)
         {
             Debug.WriteLine("Cooldown Timer Finished");
             _cooldownTimer.Stop();
             _cooldownTimer.Dispose();
             _activePairs.Add(removedPair);
+            return null;
+        }
+
+        private static EventHandler CacheClear()
+        {
+            Cache.Clear();
             return null;
         }
     }

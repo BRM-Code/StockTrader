@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:StockTrader_.NET_Framework_"
         mc:Ignorable="d"
-        Title="Startup" Height="300" Width="500">
+        Title="Startup" Height="300" Width="500" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -15,11 +14,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Startup:" Grid.ColumnSpan="2" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label x:Name="ConnLabel" Content="Connecting to Database" Visibility="Hidden" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="1" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>

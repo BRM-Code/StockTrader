@@ -5,16 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         FontFamily="Roboto"
-        Title="Trading" Height="400" Width="350">
+        Title="Trading" Height="400" Width="350" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
     <Grid>
         <Grid HorizontalAlignment="Left" Height="369" VerticalAlignment="Top" Width="342" Grid.RowSpan="3"/>
-        <Label x:Name="Title" Content="" Grid.Row="0" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+        <Label x:Name="Title" Content="" Grid.Row="0"  FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
         <Label Content="Shares:" HorizontalAlignment="Left" Margin="124,32.333,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <TextBox x:Name="SharesAmount" HorizontalAlignment="Center" Height="23"   Text="Amount" VerticalAlignment="Top" Width="50" Grid.Row="1" Margin="200,35,92,0"/>
         <Label Content="Current Price:" HorizontalAlignment="Left" Margin="90,76.333,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Label x:Name="Current" Content="£0"  HorizontalAlignment="Center" Margin="178,76,64,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <Button Click="Submit" Content="Submit" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="76"/>
-
+        <Button Click="Submit" Content="Submit" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="76"/>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>

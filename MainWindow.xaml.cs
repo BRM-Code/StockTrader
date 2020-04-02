@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using Newtonsoft.Json.Linq;
 using Debug = System.Diagnostics.Debug;
 
@@ -12,7 +13,6 @@ namespace StockTrader_.NET_Framework_
     {
         public static string CurrentCode = "";
         public string CurrentName = "";
-        public static float CurrentCompanyPrice;
         public string CurrentTimeFrame;
         public JToken CurrentCompanyJToken;
         public readonly Portfolio UserPortfolio;
@@ -26,6 +26,7 @@ namespace StockTrader_.NET_Framework_
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
+            IndicatorUpdater();
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
             if (!Startup.Settings.ExtremeData) return;
@@ -50,8 +51,8 @@ namespace StockTrader_.NET_Framework_
             }
             if (CurrentCode != code || !(refresh) || CurrentTimeFrame != timeFrame)
             {
-                Debug.WriteLine("Fetching Data...");
-                CurrentCompanyJToken = Api.CollectData(code, timeFrame);
+                Debug.WriteLine("Fetching New Data...");
+                CurrentCompanyJToken = Api.CollectDataLarge(code, timeFrame);
                 Debug.WriteLine("Data Received");
             }
 
@@ -89,8 +90,8 @@ namespace StockTrader_.NET_Framework_
             CurrentCode = code;
             CurrentTimeFrame = timeFrame;
             currentCompany.Content = CurrentName;
-            CurrentCompanyPrice = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
-            CurrentPrice.Content = CurrentCompanyPrice;
+            var price = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
+            CurrentPrice.Content = price;
             HighLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
             LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
             Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
@@ -109,9 +110,10 @@ namespace StockTrader_.NET_Framework_
 
         private void StartTimer()
         {
+            Debug.WriteLine("Timer started");
             _updateTimer = new Timer();
             _updateTimer.Tick += ValueUpdater;
-            _updateTimer.Interval = 60000;
+            _updateTimer.Interval = 30000;
             _updateTimer.Start();
         }
 
@@ -134,9 +136,39 @@ namespace StockTrader_.NET_Framework_
 
         private void ValueUpdater(object sender, EventArgs e)
         {
+            IndicatorUpdater();
             Debug.WriteLine("Updating Values...");
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
+        }
+
+        private void IndicatorUpdater()
+        {
+            var codes = new[] {"AAPL","MSFT","GOOG","UBER","INTC","IBM","FB","WDC","NVDA","ORCL","AMZN","AMD","DELL","ADBE", "EBAY", "SPOT"};
+            var images = new[]
+            {
+                AAPLIndicator, MSFTIndicator, GOOGIndicator, UBERIndicator, INTCIndicator, IBMIndicator, FBIndicator,
+                WDCIndicator,NVDAIndicator,ORCLIndicator,AMZNIndicator,AMDIndicator,DELLIndicator,ADBEIndicator,EBAYIndicator,
+                SPOTIndicator
+            };
+            for (var i = 0; i < 16;)
+            {
+                var data = Api.CollectDataSmall(codes[i]);
+                var dataDictionary = data.ToObject<Dictionary<string, float>>();
+                Uri source;
+                if (dataDictionary["c"] > dataDictionary["pc"])
+                {
+                    Debug.WriteLine($"Changing {codes[i]} to UP");
+                    source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\UP.png");
+                }
+                else
+                {
+                    Debug.WriteLine($"Changing {codes[i]} to DOWN");
+                    source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\DOWN.png");
+                }
+                images[i].Source = new BitmapImage(source);
+                i++;
+            }
         }
 
         private void OnClosing(object sender, EventArgs e)

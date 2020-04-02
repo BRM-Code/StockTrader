@@ -14,6 +14,8 @@ namespace StockTrader_.NET_Framework_
         {
             _currentStartup = currentStartup;
             InitializeComponent();
+            ExtremeDataCheckBox.IsChecked = Startup.Settings.ExtremeData;
+            IndicatorCheckBox.IsChecked = Startup.Settings.Indicators;
             currentServer.Content = Startup.Settings.SqlServer;
             currentDatabase.Content = Startup.Settings.SqlDatabase;
             currentUser.Content = Startup.Settings.SqlUser;
@@ -28,7 +30,7 @@ namespace StockTrader_.NET_Framework_
             if (Username.Text != "") settings.SqlUser = Username.Text;
             settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
-            this.Close();
+            Close();
         }
 
         private void OnClosing(object sender, EventArgs e)

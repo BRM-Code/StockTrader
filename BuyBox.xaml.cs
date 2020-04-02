@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 
 namespace StockTrader_.NET_Framework_
@@ -20,8 +19,9 @@ namespace StockTrader_.NET_Framework_
                 true => "Buy",
                 false => "Sell"
             };
-            var currentCompanyJToken = mainWindow.CurrentCompanyJToken;
-            Current.Content = Convert.ToSingle(currentCompanyJToken[currentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray()[0]]["1. open"]);
+            var code = MainWindow.CurrentCode;
+            var dataDictionary = Api.CollectDataSmall(code).ToObject<Dictionary<string, float>>();
+            Current.Content = dataDictionary["c"];
         }
 
         private void Submit(object sender, RoutedEventArgs e)

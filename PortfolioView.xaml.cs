@@ -22,10 +22,9 @@ namespace StockTrader_.NET_Framework_
                 var code = keys[i];
                 var shares = values[i].Shares;
                 var priceBoughtFor = values[i].PriceBought * values[i].Shares;
-                var data = Api.CollectData(keys[i], "IntraDay");
-                var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
-                var a = keysArray[0];
-                var currentValue = Convert.ToSingle(data[a]["1. open"]) * shares;
+                var data = Api.CollectDataSmall(keys[i]);
+                var dataDictionary = data.ToObject<Dictionary<string, object>>();
+                var currentValue = Convert.ToSingle(dataDictionary["c"]) * shares;
                 Codes.Items.Add(code.ToUpper());
                 Shares.Items.Add(shares);
                 OgValue.Items.Add(priceBoughtFor);

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Closed="OnClosing"
         FontFamily="Roboto"
-    Title="Stock Trader" Height="730" Width="1200" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Arrow.ico">
+    Title="Stock Trader" Height="720" Width="1200" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -66,23 +66,23 @@
             <Grid Name="lines"/>
         </wpf:Chart>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Apple" Tag="aapl"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Microsoft" Tag="msft"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Alphabet" Tag="goog"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Uber" Tag="uber"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Intel" Tag="intc"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="IBM" Tag="ibm"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Facebook" Tag="fb"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Western Digital" Tag="wdc"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Nvidia" Tag="nvda"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Oracle" Tag="orcl"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Amazon" Tag="amzn"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="AMD" Tag="amd"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Dell" Tag="dell"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Adobe" Tag="adbe"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="QinetiQ" Tag="qq"/>
-            <Button Click="ButtonHandler"  Height="40" Margin="40,0,40,0" Content="Spotify" Tag="spot"/>
+        <StackPanel Grid.Row="0" Grid.RowSpan="9" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100" Grid.ColumnSpan="2">
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Apple" Tag="aapl"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Microsoft" Tag="msft"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Alphabet" Tag="goog"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Uber" Tag="uber"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Intel" Tag="intc"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="IBM" Tag="ibm"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Facebook" Tag="fb"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Western Digital" Tag="wdc"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Nvidia" Tag="nvda"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Oracle" Tag="orcl"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Amazon" Tag="amzn"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="AMD" Tag="amd"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Dell" Tag="dell"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Adobe" Tag="adbe"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Ebay" Tag="ebay"/>
+            <Button Click="ButtonHandler"  Height="38" Width="100" Content="Spotify" Tag="spot"/>
         </StackPanel>
         <TextBox Grid.Column="8" HorizontalAlignment="Left" Text="{Binding ElementName=Nodatapointslider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Height="20" Width="30" Margin="-40"/>
         <Slider x:Name="Nodatapointslider" HorizontalAlignment="Center" Width="300" Maximum="100" Minimum="0" Value="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Height="28" Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="3"/>
@@ -114,5 +114,21 @@
                 <MenuItem Header="Settings" Click="OpenSettings"/>
             </Menu>
         </StackPanel>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="0" Height="40" Width="40" x:Name="AAPLIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" Height="40" Width="40" x:Name="MSFTIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="1" Height="40" Width="40" x:Name="GOOGIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="2" Height="40" Width="40" x:Name="UBERIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="2" Height="40" Width="40" x:Name="INTCIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="3" Height="40" Width="40" x:Name="IBMIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="3" Height="40" Width="40" x:Name="FBIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="4" Height="40" Width="40" x:Name="WDCIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="4" Height="40" Width="40" x:Name="NVDAIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="5" Height="40" Width="40" x:Name="ORCLIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="5" Height="40" Width="40" x:Name="AMZNIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="6" Height="40" Width="40" x:Name="AMDIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="6" Height="40" Width="40" x:Name="DELLIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="7" Height="40" Width="40" x:Name="ADBEIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="7" Height="40" Width="40" x:Name="EBAYIndicator"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="8" Height="40" Width="40" x:Name="SPOTIndicator"/>
     </Grid>
 </Window>
