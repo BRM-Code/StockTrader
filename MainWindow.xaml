@@ -99,7 +99,8 @@
         <Label Content="Prediction Algorithm:" Grid.Column="9" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <ComboBox x:Name="PredictionMethodComboBox" Grid.Row="4" Grid.Column="9" Grid.ColumnSpan="2" Height="22" Width="200" Margin="23.2,25.914,24,0" VerticalAlignment="Top">
             <ComboBoxItem Content="Off" IsSelected="True"/>
-            <ComboBoxItem Content="Moving Average"/>
+            <ComboBoxItem Content="Simple Moving Average"/>
+            <ComboBoxItem Content="Exponential Moving Average"/>
             <ComboBoxItem Content="Linear Extrapolation"/>
         </ComboBox>
 

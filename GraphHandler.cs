@@ -26,7 +26,7 @@ namespace StockTrader_.NET_Framework_
                 var minimumLine = new LineGraph();
                 mainWindow.lines.Children.Add(minimumLine);
                 minimumLine.Stroke = new SolidColorBrush(Colors.Red);
-                minimumLine.Description = $"{mainWindow.CurrentName}'s Price";
+                minimumLine.Description = $"Auto Sale Trigger Value";
                 minimumLine.StrokeThickness = 2;
                 minimumLine.Plot(z, w);
                 return;
@@ -61,12 +61,18 @@ namespace StockTrader_.NET_Framework_
                         y = predictedValues.Values.ToArray();
                         break;
                     }
-                case "Moving Average":
+                case "Simple Moving Average":
                     {
                         x = await DrawX(noDataPoints,true);
                         y = await Predictor.Sma(data, noDataPoints);
                         break;
                     }
+                case "Exponential Moving Average":
+                {
+                    x = await DrawX(noDataPoints, false);
+                    y = await Predictor.Ema(data, noDataPoints);
+                    break;
+                }
             }
             var newline = new LineGraph();
             mainWindow.lines.Children.Add(newline);

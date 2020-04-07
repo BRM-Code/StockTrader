@@ -9,6 +9,24 @@ namespace StockTrader_.NET_Framework_
 {
     internal static class Predictor
     {
+        public static async Task<float[]> Ema(JToken data, int noDataPoints)
+        {
+            var sma = await Sma(data, noDataPoints);
+            var keysArray = data.ToObject<Dictionary<string, JToken>>().Keys.ToArray();
+            var previousEma = sma[0];
+            var yValues = new float[noDataPoints];
+            for (var i = 0; i < noDataPoints;)
+            {
+                var currentItem = keysArray[noDataPoints - i - 1];
+                var k = 2.0 / ((noDataPoints - i) + 1.0);
+                var price = Convert.ToSingle(data[currentItem]["1. open"]);
+                yValues[i] = price * (float)k + previousEma * (1 - (float)k);
+                previousEma = yValues[i];
+                i++;
+            }
+            return yValues;
+        }
+
         public static async Task<float[]> Sma(JToken data, int noDataPoints)// for this one we only need to calculate y
         {
             Debug.WriteLine("Finding SMA...");

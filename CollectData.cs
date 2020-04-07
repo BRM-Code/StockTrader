@@ -25,7 +25,7 @@ namespace StockTrader_.NET_Framework_
         public static JToken CollectDataSmall(string company)
         {
             Debug.WriteLine("Fetching Response...");
-            var apiResponse = "";
+            string apiResponse;
             var wb = new WebClient();
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={company.ToUpper()}&token=bq2u8afrh5rfg81l876g");
             try
@@ -46,7 +46,11 @@ namespace StockTrader_.NET_Framework_
         public static JToken CollectDataLarge(string company,string timeFrame)
         {
             var comboString = company + timeFrame;
-            CacheClearTimer();
+            if (_cacheClearTimer == null)
+            {
+                CacheClearTimer();
+            }
+
             if (Cache.ContainsKey(comboString))
             {
                 Debug.WriteLine("Response Found in cache");
@@ -109,7 +113,7 @@ namespace StockTrader_.NET_Framework_
             var jObjectName = timeFrame switch
             {
                 "IntraDay" => "Time Series (5min)",
-                "Daliy" => "Time Series (Daily)",
+                "Daily" => "Time Series (Daily)",
                 "Weekly" => "Weekly Time Series",
                 "Monthly" => "Monthly Time Series",
                 _ => "Error"
@@ -118,8 +122,8 @@ namespace StockTrader_.NET_Framework_
 
             try
             {
-                var valuesLength = values.ToObject<Dictionary<string, object>>().Keys.ToArray();
-                Debug.WriteLine($"Returned JToken with {valuesLength.Length} values");
+                //var valuesLength = values.ToObject<Dictionary<string, object>>().Keys.ToArray();
+                //Debug.WriteLine($"Returned JToken with {valuesLength.Length} values");
             }
             catch
             {
@@ -135,7 +139,7 @@ namespace StockTrader_.NET_Framework_
             timeFrame = timeFrame switch
             {
                 "IntraDay" => "TIME_SERIES_INTRADAY",
-                "Daliy" => "TIME_SERIES_DAILY",
+                "Daily" => "TIME_SERIES_DAILY",
                 "Weekly" => "TIME_SERIES_WEEKLY",
                 "Monthly" => "TIME_SERIES_MONTHLY",
                 _ => timeFrame
@@ -184,7 +188,15 @@ namespace StockTrader_.NET_Framework_
 
         private static EventHandler CacheClear()
         {
-            Cache.Clear();
+            var keys = Cache.Keys.ToArray();
+            for (var i = 0; i < Cache.Count;)
+            {
+                if (keys[i].Contains("IntraDay"))
+                {
+                    Cache[keys[i]].Remove();
+                }
+            }
+            
             return null;
         }
     }

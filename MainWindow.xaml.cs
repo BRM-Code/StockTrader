@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json.Linq;
-using Debug = System.Diagnostics.Debug;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -13,15 +13,15 @@ namespace StockTrader_.NET_Framework_
     {
         public static string CurrentCode = "";
         public string CurrentName = "";
-        public string CurrentTimeFrame;
-        public JToken CurrentCompanyJToken;
         public readonly Portfolio UserPortfolio;
-        public static string[] codes = new[] { "AAPL", "MSFT", "GOOG", "UBER", "INTC", 
+        public static readonly string[] Codes = { "AAPL", "MSFT", "GOOG", "UBER", "INTC", 
                                                 "IBM", "FB", "WDC", "NVDA", "ORCL", 
                                                 "AMZN", "AMD", "DELL", "ADBE", "EBAY", 
                                                 "SPOT" };
+        private string _currentTimeFrame;
+        private JToken _currentJToken;
         private Timer _updateTimer;
-        public readonly Startup _currentStartup;
+        private readonly Startup _currentStartup;
 
         public MainWindow(Portfolio userPortfolio, Startup currentStartup)
         {
@@ -54,20 +54,20 @@ namespace StockTrader_.NET_Framework_
             //Setup Variables For the Method
             var timeFrame = TimeframeComboBox.SelectionBoxItem.ToString();
             var noDataPoints = Convert.ToInt32(Nodatapointslider.Value);
-            if (CurrentTimeFrame == null)
+            if (_currentTimeFrame == null)
             {
                 Debug.WriteLine("Timeframe was null");
-                CurrentTimeFrame = timeFrame;
+                _currentTimeFrame = timeFrame;
             }
-            if (CurrentCode != code || !(refresh) || CurrentTimeFrame != timeFrame)
+            if (CurrentCode != code || !(refresh) || _currentTimeFrame != timeFrame)
             {
                 Debug.WriteLine("Fetching New Data...");
-                CurrentCompanyJToken = Api.CollectDataLarge(code, timeFrame);
+                _currentJToken = Api.CollectDataLarge(code, timeFrame);
                 Debug.WriteLine("Data Received");
             }
 
             //Setup Variables that rely on The Collected data
-            var keysArray = CurrentCompanyJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            var keysArray = _currentJToken.ToObject<Dictionary<string, object>>().Keys.ToArray();
 
             //Cleans up the input before drawing the graph
             //This makes sure the user hasn't asked for more data than the JToken can provide
@@ -83,10 +83,10 @@ namespace StockTrader_.NET_Framework_
                 noDataPoints = 240;
             }
             //This draws the graphs
-            await GraphHandler.Draw(CurrentCompanyJToken, noDataPoints, this,0);
+            await GraphHandler.Draw(_currentJToken, noDataPoints, this,0);
             if (PredictionMethodComboBox.Text != "Off")
             {
-                await GraphHandler.PredictionDraw(CurrentCompanyJToken, noDataPoints, this);
+                await GraphHandler.PredictionDraw(_currentJToken, noDataPoints, this);
             }
 
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
@@ -103,13 +103,13 @@ namespace StockTrader_.NET_Framework_
             //Adds values the labels to the right of the window
             plotter.BottomTitle = timeFrame;
             CurrentCode = code;
-            CurrentTimeFrame = timeFrame;
+            _currentTimeFrame = timeFrame;
             currentCompany.Content = CurrentName;
-            var price = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["1. open"]);
+            var price = Convert.ToSingle(_currentJToken[keysArray[0]]["1. open"]);
             CurrentPrice.Content = price;
-            HighLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["2. high"]);
-            LowLabel.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["3. low"]);
-            Volume.Content = Convert.ToSingle(CurrentCompanyJToken[keysArray[0]]["5. volume"]);
+            HighLabel.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["2. high"]);
+            LowLabel.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["3. low"]);
+            Volume.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["5. volume"]);
         }
 
         private void TraderButtonHandler(bool isBuyBox)
@@ -170,26 +170,26 @@ namespace StockTrader_.NET_Framework_
             };
             for (var i = 0; i < 16;)
             {
-                var data = Api.CollectDataSmall(codes[i]);
+                var data = Api.CollectDataSmall(Codes[i]);
                 var dataDictionary = data.ToObject<Dictionary<string, float>>();
                 Uri source;
-                if (Startup.Settings.AutoTradeRules.ContainsKey(codes[i]))
+                if (Startup.Settings.AutoTradeRules.ContainsKey(Codes[i]))
                 {
-                    if (dataDictionary["c"] < Startup.Settings.AutoTradeRules[codes[i].ToUpper()])
+                    if (dataDictionary["c"] < Startup.Settings.AutoTradeRules[Codes[i].ToUpper()])
                     {
-                        var shares = UserPortfolio.SharesDictionary[codes[i]].Shares;
-                        Debug.WriteLine($"AutoSale triggered for {codes[i].ToUpper()}, sold {shares}");
-                        UserPortfolio.Sell(codes[i], shares);
+                        var shares = UserPortfolio.SharesDictionary[Codes[i]].Shares;
+                        Debug.WriteLine($"AutoSale triggered for {Codes[i].ToUpper()}, sold {shares}");
+                        UserPortfolio.Sell(Codes[i], shares);
                     }
                 }
                 if (dataDictionary["c"] > dataDictionary["pc"])
                 {
-                    Debug.WriteLine($"Changing {codes[i]} to UP");
+                    Debug.WriteLine($"Changing {Codes[i]} to UP");
                     source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\UP.png");
                 }
                 else
                 {
-                    Debug.WriteLine($"Changing {codes[i]} to DOWN");
+                    Debug.WriteLine($"Changing {Codes[i]} to DOWN");
                     source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\DOWN.png");
                 }
                 images[i].Source = new BitmapImage(source);
