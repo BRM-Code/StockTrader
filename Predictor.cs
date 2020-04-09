@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace StockTrader_.NET_Framework_
 {
-    internal static class Predictor
+    public static class Predictor
     {
         public static async Task<float[]> Ema(JToken data, int noDataPoints)
         {
@@ -64,6 +64,12 @@ namespace StockTrader_.NET_Framework_
                 Debug.WriteLine($"Assigning Value at index {index1 / 10}");
                 yValues[index1 / 10] = total;
                 index1 += 10;
+            }
+
+            for (var i = 0; i < yValues.Length;)
+            {
+                Debug.WriteLine(yValues[i]);
+                i++;
             }
             return yValues;
         }
