@@ -14,7 +14,7 @@ namespace StockTrader_.NET_Framework_
             _currentMainWindow = mainWindow;
             _isBuyBox = isBuyBox;
             InitializeComponent();
-            Title.Content = _isBuyBox switch
+            BoxTitle.Content = _isBuyBox switch
             {
                 true => "Buy",
                 false => "Sell"

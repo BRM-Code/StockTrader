@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Startup" Height="300" Width="500" Icon="C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\Arrow.ico">
+        Title="Startup" Height="300" Width="500" Icon="pack://siteoforigin:,,,/Icons/Arrow.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

@@ -91,7 +91,7 @@ namespace StockTrader_.NET_Framework_
 
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
             {
-                ExtremeDataWarning.Content = $"Warning:\n ExtremeData Mode doesn't work with {timeFrame}";
+                ExtremeDataWarning.Content = $"Warning:\n ExtremeData Mode doesn't work with {timeFrame} Time Frame";
             }
             else {ExtremeDataWarning.Content = "Extreme data mode enabled";}
 
@@ -104,9 +104,8 @@ namespace StockTrader_.NET_Framework_
             plotter.BottomTitle = timeFrame;
             CurrentCode = code;
             _currentTimeFrame = timeFrame;
-            currentCompany.Content = CurrentName;
-            var price = Convert.ToSingle(_currentJToken[keysArray[0]]["1. open"]);
-            CurrentPrice.Content = price;
+            currentCompany.Content = CurrentName; 
+            CurrentPrice.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["1. open"]);
             HighLabel.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["2. high"]);
             LowLabel.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["3. low"]);
             Volume.Content = Convert.ToSingle(_currentJToken[keysArray[0]]["5. volume"]);
@@ -185,12 +184,12 @@ namespace StockTrader_.NET_Framework_
                 if (dataDictionary["c"] > dataDictionary["pc"])
                 {
                     Debug.WriteLine($"Changing {Codes[i]} to UP");
-                    source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\UP.png");
+                    source = new Uri(@"pack://siteoforigin:,,,/Icons/UP.png");
                 }
                 else
                 {
                     Debug.WriteLine($"Changing {Codes[i]} to DOWN");
-                    source = new Uri(@"C:\Users\mrowb\source\repos\StockTrader(.NET Framework)\Icons\DOWN.png");
+                    source = new Uri(@"pack://siteoforigin:,,,/Icons/DOWN.png");
                 }
                 images[i].Source = new BitmapImage(source);
                 i++;

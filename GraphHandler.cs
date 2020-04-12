@@ -68,16 +68,16 @@ namespace StockTrader_.NET_Framework_
                         break;
                     }
                 case "Exponential Moving Average":
-                {
-                    x = await DrawX(noDataPoints, false);
-                    y = await Predictor.Ema(data, noDataPoints);
-                    break;
-                }
+                    {
+                       x = await DrawX(noDataPoints, false);
+                       y = await Predictor.Ema(data, noDataPoints);
+                       break;
+                    }
             }
             var newline = new LineGraph();
             mainWindow.lines.Children.Add(newline);
             newline.Stroke = new SolidColorBrush(Colors.Green);
-            newline.Description = $"{mainWindow.CurrentName}'s Trend";
+            newline.Description = $"{mainWindow.CurrentName}'s {algorithm}";
             newline.StrokeThickness = 2;
             newline.Plot(x, y);
             Debug.WriteLine("Graph Drawn");

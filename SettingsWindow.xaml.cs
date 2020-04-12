@@ -16,9 +16,9 @@ namespace StockTrader_.NET_Framework_
             InitializeComponent();
             ExtremeDataCheckBox.IsChecked = Startup.Settings.ExtremeData;
             IndicatorCheckBox.IsChecked = Startup.Settings.Indicators;
-            currentServer.Content = Startup.Settings.SqlServer;
-            currentDatabase.Content = Startup.Settings.SqlDatabase;
-            currentUser.Content = Startup.Settings.SqlUser;
+            CurrentServer.Content = Startup.Settings.SqlServer;
+            CurrentDatabase.Content = Startup.Settings.SqlDatabase;
+            CurrentUser.Content = Startup.Settings.SqlUser;
         }
 
         private void ApplyButton(object sender, RoutedEventArgs e)
