@@ -21,10 +21,18 @@ namespace StockTrader_.NET_Framework_
         public float AvailableFunds;// how much money the account has available to spend on shares
         public Dictionary<string, StockStorage> SharesDictionary;// string is the companies codes and a StockStorage instance
 
-        public Portfolio()
+        public Portfolio(float funds, Dictionary<string, StockStorage> dictionary)
         {
-            AvailableFunds = 50000;
-            SharesDictionary = new Dictionary<string, StockStorage>();
+            if (funds == 0 || dictionary == null)
+            {
+                AvailableFunds = 50000;
+                SharesDictionary = new Dictionary<string, StockStorage>();
+            }
+            else
+            {
+                AvailableFunds = funds;
+                SharesDictionary = dictionary;
+            }
         }
 
         public float CalculateTotalAccountValue()
