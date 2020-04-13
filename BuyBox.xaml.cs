@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace StockTrader_.NET_Framework_
 {
@@ -26,7 +29,13 @@ namespace StockTrader_.NET_Framework_
 
         private void Submit(object sender, RoutedEventArgs e)
         {
-            var noShares = Convert.ToInt32((SharesAmount.Text));
+            var regex = new Regex(@"[^0-9]");
+            if (regex.IsMatch(SharesAmount.Text))
+            {
+                MessageBox.Show("That's not a valid amount.", "Error");
+                return;
+            }
+            var noShares = Convert.ToInt32(SharesAmount.Text);
             switch (_isBuyBox)
             {
                 case true:
@@ -37,6 +46,13 @@ namespace StockTrader_.NET_Framework_
                     break;
             }
             Close();
+        }
+
+        private void SharesAmount_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var input = e.Text;
+            var pattern = "[^0-9]+";
+            e.Handled = Regex.IsMatch(input,pattern);
         }
     }
 }
