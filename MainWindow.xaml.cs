@@ -22,17 +22,16 @@ namespace StockTrader_.NET_Framework_
         private JToken _currentJToken;
         private Timer _updateTimer;
         private readonly Startup _currentStartup;
-
+        
+        //Setting up the window
         public MainWindow(Portfolio userPortfolio, Startup currentStartup)
         {
             _currentStartup = currentStartup;
             UserPortfolio = userPortfolio;
             StartTimer();
             InitializeComponent();
-            if (Startup.Settings.Indicators)
-            {
-                IndicatorUpdater();
-            }
+            Show();
+            if (Startup.Settings.Indicators) {IndicatorUpdater();}
             AvailableFunds.Content = $"£{UserPortfolio.AvailableFunds}";
             AccountValue.Content = $"£{UserPortfolio.CalculateTotalAccountValue()}";
             if (!Startup.Settings.ExtremeData)
@@ -41,7 +40,7 @@ namespace StockTrader_.NET_Framework_
                 return;
             }
             ExtremeDataWarning.Visibility = Visibility.Visible;
-            Nodatapointslider.Maximum = 1160;
+            Nodatapointslider.Maximum = 5030;
             Nodatapointslider.TickFrequency = 100;
         }
 
@@ -85,8 +84,8 @@ namespace StockTrader_.NET_Framework_
             //This draws the graphs
             await GraphHandler.Draw(_currentJToken, noDataPoints, this,0);
             if (PredictionMethodComboBox.Text != "Off")
-            {
-                await GraphHandler.PredictionDraw(_currentJToken, noDataPoints, this);
+            { 
+                GraphHandler.PredictionDraw(_currentJToken, noDataPoints, this);
             }
 
             if ((timeFrame == "Weekly" || timeFrame == "Monthly") && (Startup.Settings.ExtremeData))
@@ -167,9 +166,17 @@ namespace StockTrader_.NET_Framework_
                 WDCIndicator,NVDAIndicator,ORCLIndicator,AMZNIndicator,AMDIndicator,DELLIndicator,ADBEIndicator,EBAYIndicator,
                 SPOTIndicator
             };
+            var data2 = new JToken[16];
+
+            for (var ii = 0; ii < 16;)
+            {
+                data2[ii] = Api.CollectDataSmall(Codes[ii]);
+                ii++;
+            }
+
             for (var i = 0; i < 16;)
             {
-                var data = Api.CollectDataSmall(Codes[i]);
+                var data = data2[i];
                 var dataDictionary = data.ToObject<Dictionary<string, float>>();
                 Uri source;
                 if (Startup.Settings.AutoTradeRules.ContainsKey(Codes[i]))
@@ -234,7 +241,8 @@ namespace StockTrader_.NET_Framework_
             }
             else
             {
-                Nodatapointslider.Maximum = 100;
+                if (Startup.Settings.ExtremeData) {Nodatapointslider.Maximum = 5030;}
+                else {Nodatapointslider.Maximum = 100;}
             }
         }
 
@@ -252,4 +260,4 @@ namespace StockTrader_.NET_Framework_
             window.Show();
         }
     }
-}
+}   

@@ -29,6 +29,7 @@ namespace StockTrader_.NET_Framework_
             if (DatabaseEntry.Text != "") settings.SqlDatabase = DatabaseEntry.Text; 
             if (Username.Text != "") settings.SqlUser = Username.Text;
             settings.ExtremeData = ExtremeDataCheckBox.IsChecked.Value;
+            settings.Indicators = IndicatorCheckBox.IsChecked.Value;
             ApplyLabel.Visibility = Visibility.Visible;
             Close();
         }

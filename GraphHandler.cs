@@ -16,7 +16,7 @@ namespace StockTrader_.NET_Framework_
         {
             if (minimum != 0)
             {
-                var z = await DrawX(noDataPoints, false);
+                var z = await DrawX(noDataPoints, 1);
                 var w = new float[noDataPoints];
                 for (var i = 0; i < noDataPoints;)
                 {
@@ -35,7 +35,7 @@ namespace StockTrader_.NET_Framework_
             mainWindow.lines.Children.Clear();
             if (data == null || noDataPoints == 0) return;
             var y = await DrawY(data, noDataPoints);
-            var x = await DrawX(noDataPoints, false);
+            var x = await DrawX(noDataPoints, 1);
             var newline = new LineGraph();
             mainWindow.lines.Children.Add(newline);
             newline.Stroke = new SolidColorBrush(Colors.Blue);
@@ -46,12 +46,17 @@ namespace StockTrader_.NET_Framework_
         }
 
 
-        public static async Task PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
+        public static async void PredictionDraw(JToken data, int noDataPoints, MainWindow mainWindow)
         {
             Debug.WriteLine("Drawing Prediction Graph...");
             IEnumerable x = null;
             IEnumerable y = null;
             var algorithm = mainWindow.PredictionMethodComboBox.SelectionBoxItem.ToString();
+            float[] a = null;
+            float[] b = null;
+            float[] c = null;
+            float[] d = null;
+            float[] e = null;
             switch (algorithm)
             {
                 case "Linear Extrapolation":
@@ -63,23 +68,110 @@ namespace StockTrader_.NET_Framework_
                     }
                 case "Simple Moving Average":
                     {
-                        x = await DrawX(noDataPoints,true);
+                        x = await DrawX(noDataPoints,10);
                         y = await Predictor.Sma(data, noDataPoints);
                         break;
                     }
                 case "Exponential Moving Average":
                     {
-                       x = await DrawX(noDataPoints, false);
+                       x = await DrawX(noDataPoints, 1);
                        y = await Predictor.Ema(data, noDataPoints);
                        break;
                     }
+                case "Tenkan-Sen (Conversion Line)":
+                    {
+                        x = await DrawX(noDataPoints, 9);
+                        y = await Predictor.TenkanSen(data, noDataPoints);
+                        break;
+                    }
+                case "Kijun-Sen (Base Line)":
+                    {
+                        x = await DrawX(noDataPoints, 26);
+                        y = await Predictor.KijkunSen(data, noDataPoints);
+                        break;
+                    }
+                case "Senkou Span A":
+                    {
+                        x = await DrawX(noDataPoints, 9);
+                        var KijkunSen = await Predictor.KijkunSen(data, noDataPoints);
+                        var TenkanSen = await Predictor.TenkanSen(data, noDataPoints);
+                        y = await Predictor.SenkouA(TenkanSen, KijkunSen);
+                        break;
+                    }
+                case "Senkou Span B":
+                    {
+                        x = await DrawX(noDataPoints, 52);
+                        y = await Predictor.SenkouB(data, noDataPoints);
+                        break;
+                    }
+                case "Chikou Span (Lagging Span)":
+                    {
+                        x = await DrawX(noDataPoints, 26);
+                        y = await Predictor.Chikou(data, noDataPoints);
+                        break;
+                    }
+                case "Ichimoku Cloud":
+                    {
+                        //Chikou
+                        a = await Predictor.Chikou(data, noDataPoints);
+                        var ax = await DrawX(noDataPoints, 26);
+                        var lineA = new LineGraph();
+                        mainWindow.lines.Children.Add(lineA);
+                        lineA.Stroke = new SolidColorBrush(Colors.Orange);
+                        lineA.Description = $"Chikou";
+                        lineA.StrokeThickness = 2;
+                        lineA.Plot(ax, a);
+
+                        //Tenkan-San
+                        b = await Predictor.TenkanSen(data, noDataPoints);
+                        var bx = await DrawX(noDataPoints, 9);
+                        var lineB = new LineGraph();
+                        mainWindow.lines.Children.Add(lineB);
+                        lineB.Stroke = new SolidColorBrush(Colors.Green);
+                        lineB.Description = $"Tenkan-Sen";
+                        lineB.StrokeThickness = 2;
+                        lineB.Plot(bx, b);
+
+                        //Kijkun-Sen
+                        c = await Predictor.KijkunSen(data, noDataPoints);
+                        var lineC = new LineGraph();
+                        mainWindow.lines.Children.Add(lineC);
+                        lineC.Stroke = new SolidColorBrush(Colors.Indigo);
+                        lineC.Description = $"Kijun-Sen";
+                        lineC.StrokeThickness = 2;
+                        lineC.Plot(ax, c);
+
+                        //Senkou Span A
+                        d = await Predictor.SenkouA(b, c);
+                        var lineD = new LineGraph();
+                        mainWindow.lines.Children.Add(lineD);
+                        lineD.Stroke = new SolidColorBrush(Colors.BlueViolet);
+                        lineD.Description = $"Senkou Span A";
+                        lineD.StrokeThickness = 2;
+                        lineD.Plot(bx, d);
+
+                        //Senkou Span B
+                        e = await Predictor.SenkouB(data, noDataPoints);
+                        var cx = await DrawX(noDataPoints, 52);
+                        var lineE = new LineGraph();
+                        mainWindow.lines.Children.Add(lineE);
+                        lineE.Stroke = new SolidColorBrush(Colors.Salmon);
+                        lineE.Description = $"Senkou Span B";
+                        lineE.StrokeThickness = 2;
+                        lineE.Plot(cx, e);
+                        break;
+                    }
             }
-            var newline = new LineGraph();
-            mainWindow.lines.Children.Add(newline);
-            newline.Stroke = new SolidColorBrush(Colors.Green);
-            newline.Description = $"{mainWindow.CurrentName}'s {algorithm}";
-            newline.StrokeThickness = 2;
-            newline.Plot(x, y);
+
+            if (algorithm != "Ichimoku Cloud")
+            {
+                var newline = new LineGraph();
+                mainWindow.lines.Children.Add(newline);
+                newline.Stroke = new SolidColorBrush(Colors.Green);
+                newline.Description = $"{mainWindow.CurrentName}'s {algorithm}";
+                newline.StrokeThickness = 2;
+                newline.Plot(x, y);
+            }
             Debug.WriteLine("Graph Drawn");
         }
 
@@ -98,11 +190,10 @@ namespace StockTrader_.NET_Framework_
             return y;
         }
 
-        private static async Task<List<int>> DrawX(int noDataPoints,bool isSMA)
+        private static async Task<List<int>> DrawX(int noDataPoints,int period)
         {
             Debug.WriteLine("Fetching Values for X...");
-            var a = 1;
-            if (isSMA)a = 10;
+            var a = period;
             var x = new List<int>();
             for (var i = 0; i < noDataPoints;)
             {

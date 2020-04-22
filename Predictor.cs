@@ -9,6 +9,118 @@ namespace StockTrader_.NET_Framework_
 {
     public static class Predictor
     {
+        public static async Task<float[]> TenkanSen(JToken data, int noDataPoints)
+        {
+            var arrayLength = Convert.ToSingle(noDataPoints) / 9.0;
+            var yValues = new float[(int)Math.Ceiling((decimal)arrayLength)];
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (var index1 = 0; index1 < noDataPoints;)
+            {
+                var index2Max = index1 + 9;
+                int index2;
+                float high = 0;
+                float low = 0;
+                for (index2 = index1; index2 < index2Max;)
+                {
+                    if (index2 == noDataPoints) {break;}
+                    var b = keysArray[noDataPoints - index2 - 1];
+                    var valueHigh = Convert.ToSingle(data[b]["2. high"]);
+                    var valueLow = Convert.ToSingle(data[b]["3. low"]);
+                    if (valueHigh > high || index2 == index2Max - 9) {high = valueHigh;}
+                    if (valueLow < low || index2 == index2Max - 9) {low = valueLow;}
+                    index2++;
+                }
+                yValues[index1/9] = (float) ((high + low)/2);
+                index1 +=9;
+            }
+            return yValues;
+        }
+
+        public static async Task<float[]> SenkouA(float[] TenkanSen, float[] KijkunSen)
+        {
+            var yValues = new float[TenkanSen.Length];
+            var valueHold = (int) Math.Ceiling((double) (TenkanSen.Length / KijkunSen.Length));
+            var currentValueHold = valueHold;
+            var j = valueHold;
+            for (var i = 0; i < TenkanSen.Length;)
+            {
+                if (currentValueHold == 0) { j++; }
+                yValues[i] = (float) ((TenkanSen[i] + KijkunSen[j])/2);
+                currentValueHold -= 1;
+                i++;
+            }
+            return yValues;
+        }
+
+        public static async Task<float[]> SenkouB(JToken data, int noDataPoints)
+        {
+            var arrayLength = Convert.ToSingle(noDataPoints) / 52.0;
+            var yValues = new float[(int)Math.Ceiling((decimal)arrayLength)];
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (var index1 = 0; index1 < noDataPoints;)
+            {
+                var index2Max = index1 + 52;
+                int index2;
+                float high = 0;
+                float low = 0;
+                for (index2 = index1; index2 < index2Max;)
+                {
+                    if (index2 == noDataPoints) { break; }
+                    var b = keysArray[noDataPoints - index2 - 1];
+                    var valueHigh = Convert.ToSingle(data[b]["2. high"]);
+                    var valueLow = Convert.ToSingle(data[b]["3. low"]);
+                    if (valueHigh > high || index2 == index2Max - 9) { high = valueHigh; }
+                    if (valueLow < low || index2 == index2Max - 9) { low = valueLow; }
+                    index2++;
+                }
+                yValues[index1 / 52] = (float)((high + low)/2);
+                index1 += 52;
+            }
+            return yValues;
+        }
+
+        public static async Task<float[]> Chikou(JToken data, int noDataPoints)
+        {
+            var arrayLength = Convert.ToSingle(noDataPoints) / 26.0;
+            var yValues = new float[(int)Math.Ceiling((decimal)arrayLength)];
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (var index1 = 0; index1 < noDataPoints;)
+            {
+                var b = keysArray[noDataPoints - index1 - 1];
+                yValues[index1/26] = Convert.ToSingle(data[b]["4. close"]);
+                index1 += 26;
+            }
+            return yValues;
+        }
+
+        public static async Task<float[]> KijkunSen(JToken data, int noDataPoints)
+        {
+            var arrayLength = Convert.ToSingle(noDataPoints) / 26.0;
+            var yValues = new float[(int)Math.Ceiling((decimal)arrayLength)];
+            var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
+            for (var index1 = 0; index1 < noDataPoints;)
+            {
+                var index2Max = index1 + 26;
+                int index2;
+                float high = 0;
+                float low = 0;
+                for (index2 = index1; index2 < index2Max;)
+                {
+                    if (index2 == noDataPoints) { break; }
+                    var b = keysArray[noDataPoints - index2 - 1];
+                    var valueHigh = Convert.ToSingle(data[b]["2. high"]);
+                    var valueLow = Convert.ToSingle(data[b]["3. low"]);
+                    if (valueHigh > high || index2 == index2Max - 9) { high = valueHigh; }
+                    if (valueLow < low || index2 == index2Max - 9) { low = valueLow; }
+                    index2++;
+                }
+                yValues[index1/26] = (float)((high + low)/2);
+                index1 += 26;
+            }
+            return yValues;
+        }
+
+
         public static async Task<float[]> Ema(JToken data, int noDataPoints)
         {
             var sma = await Sma(data, noDataPoints);
@@ -43,7 +155,7 @@ namespace StockTrader_.NET_Framework_
                 int index2;
                 for (index2 = index1; index2 < index2Max;) //This adds 10 values together
                 {
-                    if (index2 == keysArray.Length)
+                    if (index2 == noDataPoints)
                     {
                         fractional = true;
                         break;
@@ -94,7 +206,7 @@ namespace StockTrader_.NET_Framework_
 
         private static async Task<Dictionary<float,float>> LeEquation(JToken data, int noDataPoints)//Get Equation
         {
-            var ey = await Predictor.ey(data, noDataPoints);
+            var ey = await Predictor.Ey(data, noDataPoints);
             var ex = await Predictor.Ex(noDataPoints);
             var exSquared = await Predictor.ExSquared(noDataPoints);
             var exy = await Predictor.Exy(data, noDataPoints);
@@ -105,7 +217,7 @@ namespace StockTrader_.NET_Framework_
             return abFloats;
         }
 
-        private static async Task<float> ey(JToken data, int noDataPoints)
+        private static async Task<float> Ey(JToken data, int noDataPoints)
         {
             float y = 0;
             var keysArray = data.ToObject<Dictionary<string, object>>().Keys.ToArray();
